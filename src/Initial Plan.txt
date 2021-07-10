@@ -1,0 +1,43 @@
+The application shall be able to manage at least 100 unique todo lists 
+	- Use a List of todoList Objects. Make sure UI drop-down box can handle arbitrarily large numbers of items.
+
+A todo list shall have a title 
+	- Title parameter in the todoList Object.
+A todo list shall have the capacity to store at least 100 unique items 
+	- Use a list of todoItem objects. Make sure UI box can handle arbitrarily large numbers of items.
+
+An item shall have a description 
+	- Description parameter in the todoItem Object.
+An item shall have a due date, formatted as YYYY-MM-DD 
+	- Due date parameter in the todoItem Object.
+
+A user shall be able to add a new todo list 
+	- Instantiate a new todoList Object, get input for the title, store in the List.
+A user shall be able to remove an existing todo list 
+	- Get the list to be removed, remove it from the List.
+A user shall be able to edit the title of an existing todo list 
+	- Set the new title of the todoList object. If possible, allow true editing, if not then just get a new title from the user.
+A user shall be able to add a new item to an existing todo list 
+	- Get item description and due date, instantiate new todoitem object with those parameters. Add it to the List.
+A user shall be able to remove an item from an existing todo list 
+	- Get the item to be removed. Remove from the List.
+A user shall be able to edit the description of an item within an existing todo list 
+	- Change the description parameter of the selected todoItem. If possible, allow true editing, if not then just get a new description from the user.
+A user shall be able to edit the due date of an item within an existing todo list 
+	- Change the due date parameter of the selected todoItem. If possible, allow true editing, if not then just get a new date from the user.
+A user shall be able to mark an item in a todo list as complete 
+	- Completeness parameter in the todoItem Object.
+A user shall be able to display all of the existing items in a todo list 
+	- Display all items in the todoItems List of the selected todoList.
+A user shall be able to display only the incompleted items in a todo list 
+	- Display all items in the todoItems List of the selected todoList where Completeness == false.
+A user shall be able to display only the completed items in a todo list 
+	- Display all items in the todoItems List of the selected todoList where Completeness == true.
+A user shall be able to save all of the items in a single todo list to external storage 
+	- Run the saveList method of the selected todoList.
+A user shall be able to save all of the items across all of the todo lists to external storage 
+	- Run the saveAllLists method of the wrapper class.
+A user shall be able to load a single todo list that was previously saved to external storage 
+	- Run the loadList method of the wrapper class.
+A user shall be able to load multiple todo lists that were previous saved to external storage 
+	- Run the loadAllLists method of the wrapper class.
