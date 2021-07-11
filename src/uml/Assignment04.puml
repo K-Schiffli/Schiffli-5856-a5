@@ -19,15 +19,16 @@ Class ToDoListsController{
 +clickedClearList()
 +editDescriptionEnd()
 +activatedDatePicker()
++clickedHelp()
 }
 
 Class ListHandler{
 --Parameters--
 List<ToDoList>
 --Methods--
-+clearList()
 +saveList()
 +loadList()
++getFilteredItems()
 }
 
 Class ToDoList{
@@ -35,7 +36,7 @@ Class ToDoList{
 String
 List<ToDoItem>
 --Methods--
-+createItem()
++addItem()
 +removeItem()
 +getItems()
 +filterItems()
