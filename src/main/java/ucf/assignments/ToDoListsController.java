@@ -30,6 +30,7 @@ public class ToDoListsController {
     public Button filterCompButton;
     public Button clearListButton;
     public DatePicker datePicker;
+    public Button helpButton;
 
     //Create a variable for the last chosen file directory for the save/load functions
     File lastChosenDirectory = null;
@@ -101,8 +102,9 @@ public class ToDoListsController {
     }
 
     public void clickedSaveList(ActionEvent actionEvent) {
-        //Open an Explorer window to get the save folder path
+        //Check that the list has a title
         if (!listTitleBox.getText().equals("")) {
+            //Open an Explorer window to get the save folder path
             String saveFilePath = null;
             DirectoryChooser dc = new DirectoryChooser();
             if (lastChosenDirectory != null) dc.setInitialDirectory(lastChosenDirectory);
@@ -118,7 +120,8 @@ public class ToDoListsController {
         }
         else
         {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Please enter a list title.", ButtonType.OK);
+            //Display an alert if the list has no title
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a list title.", ButtonType.OK);
             alert.showAndWait();
         }
     }
@@ -240,5 +243,21 @@ public class ToDoListsController {
         }
         //Clear the text from the datePicker
         datePicker.getEditor().clear();
+    }
+
+    public void clickedHelp(ActionEvent actionEvent) {
+        //Display an information pop-up with instructions
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "To add a new item, click the \"New Item\" button.\n\n" +
+                "To edit an it's description, double-click its description box. Press enter to save your changes.\n\n" +
+                "To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.\n\n" +
+                "To mark an item as complete, click the check box next to it.\n\n" +
+                "To delete an item, click on it to select it and click the \"Delete Item\" button.\n\n" +
+                "To clear the list, click the \"Clear List\" button.\n\n" +
+                "To sort the list, double-click the header of the column you want the list sorted by.\n\n" +
+                "To filter the list, click the \"Show Complete\", \"Show Incomplete\", or \"Show All\" buttons.\n\n" +
+                "To save a list, enter a name for it in the box at the bottom and click the \"Save List\" button.\n\n" +
+                "To load a list, click the \"Load List\" button and choose the list you want to load. This will clear the current list.\n\n" +
+                "This help screen is dedicated to Rey.", ButtonType.OK);
+        alert.showAndWait();
     }
 }
