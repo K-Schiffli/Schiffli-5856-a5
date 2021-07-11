@@ -1,3 +1,7 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  Copyright 2021 first_name last_name
+ */
 package Assignment04.Lists;
 
 import Assignment04.Lists.Items.ToDoItem;
@@ -14,7 +18,7 @@ public class ToDoList {
     public void addItem() {
 
         //Create a new ToDoItem object with placeholder values
-        ToDoItem newItem = new ToDoItem(false, "Enter Due Date", "Enter a description");
+        ToDoItem newItem = new ToDoItem(false, "Select Date Below", "Enter a description");
 
         //Add the new ToDoItem to the list
         itemList.add(newItem);
@@ -28,7 +32,7 @@ public class ToDoList {
     }
 
     //Create a method to return all the items in the List of ToDoItem objects
-    public List<ToDoItem> getItems() {
+    public List getItems() {
 
         //Return the list of ToDoItems
         return itemList;
@@ -41,13 +45,18 @@ public class ToDoList {
         List<ToDoItem> filteredItemList = new ArrayList<>();
 
         //Loop through the list
-        for (int i = 0; i < itemList.size(); i++) {
+        for (ToDoItem toDoItem : itemList) {
             //Check each item's completeness against the selector
             //If they match, add them to the new list
-            if (itemList.get(i).getCompleteness() == selector) filteredItemList.add(itemList.get(i));
+            if (toDoItem.getCompleteness() == selector) filteredItemList.add(toDoItem);
         }
 
         //Return the resulting list
         return filteredItemList;
+    }
+
+    public boolean validateDesc(String description) {
+        //Check that the description is no longer than than 256 characters
+        return description.length() <= 256;
     }
 }

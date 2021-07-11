@@ -1,3 +1,7 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  Copyright 2021 first_name last_name
+ */
 package Assignment04.Lists.Items;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -6,13 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
 public class ToDoItem {
 
     //Create a completeness parameter
-    private SimpleBooleanProperty completeness;
+    public SimpleBooleanProperty completeness;
 
     //Create a due date parameter
-    private SimpleStringProperty dueDate;
+    private final SimpleStringProperty dueDate;
 
     //Create a description parameter
-    private SimpleStringProperty description;
+    private final SimpleStringProperty description;
 
     //Create a model for the ToDoItem object
     public ToDoItem(boolean completenessVal, String dueDateVal, String descriptionVal) {
@@ -22,9 +26,7 @@ public class ToDoItem {
     }
 
     //create a setter method for the completeness parameter
-    public void setCompleteness(boolean completenessVal) {
-        completeness.set(completenessVal);
-    }
+    public void setCompleteness(boolean completenessVal) { completeness.set(completenessVal); }
 
     //Create a setter method for the due date
     public void setDueDate(String dueDateVal) {

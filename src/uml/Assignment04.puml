@@ -5,7 +5,21 @@ Class ToDoLists{
 +load initial scene
 }
 
-Class ToDoListsController
+Class ToDoListsController{
+--Methods--
++Initialize()
++editedDescription()
++clickedNewItem()
++clickedDeleteItem()
++clickedSaveList()
++clickedLoadList()
++clickedFilterComp()
++clickedFilterIncomp()
++clickedFilterAll()
++clickedClearList()
++editDescriptionEnd()
++activatedDatePicker()
+}
 
 Class ListHandler{
 --Parameters--
@@ -25,6 +39,7 @@ List<ToDoItem>
 +removeItem()
 +getItems()
 +filterItems()
++validateDesc()
 }
 
 Class ToDoItem{
@@ -39,13 +54,19 @@ boolean completeness
 +getItemDesc()
 +getItemDueDate()
 +getItemCompleteness()
-+validateDate()
-+validateDesc()
 }
 
-ToDoListsController ..|> ToDoLists
+Class CheckBoxTableCellFactory{
+..Overrides..
+CheckBoxTableCell -> TableCell
+}
+
+
+ToDoLists ..|> ToDoListsController
 ToDoLists -- ListHandler
 ListHandler o- ToDoList
 ToDoList o- ToDoItem
+ToDoListsFXML <|- CheckBoxTableCellFactory
+ToDoListsFXML o- ToDoListsController
 
 @enduml

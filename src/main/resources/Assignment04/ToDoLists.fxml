@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -10,6 +11,7 @@
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import Assignment04.CheckBoxTableCellFactory?>
 <SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Assignment04.ToDoListsController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -20,8 +22,11 @@
                          <cellValueFactory>
                              <PropertyValueFactory property="completeness" />
                          </cellValueFactory>
+                         <cellFactory>
+                             <CheckBoxTableCellFactory />
+                         </cellFactory>
                      </TableColumn>
-                     <TableColumn fx:id="dueDateColumn" editable="true" onEditCancel="#editDueDateEnd" onEditCommit="#editedDueDate" prefWidth="117.0" text="Due Date">
+                     <TableColumn fx:id="dueDateColumn" editable="false" prefWidth="117.0" text="Due Date">
                          <cellValueFactory>
                              <PropertyValueFactory property="dueDate" />
                          </cellValueFactory>
@@ -29,7 +34,7 @@
                              <TextFieldTableCell fx:factory="forTableColumn" />
                          </cellFactory>
                      </TableColumn>
-                     <TableColumn fx:id="descriptionColumn" editable="true" maxWidth="564.0" onEditCancel="#editDescriptionEnd" onEditCommit="#editedDescription" prefWidth="564.0" text="Description">
+                     <TableColumn fx:id="descriptionColumn" maxWidth="564.0" onEditCancel="#editDescriptionEnd" onEditCommit="#editedDescription" prefWidth="564.0" text="Description">
                          <cellValueFactory>
                              <PropertyValueFactory property="description" />
                          </cellValueFactory>
@@ -57,14 +62,13 @@
                   <Insets bottom="4.0" left="54.0" right="54.0" top="4.0" />
                </padding>
             </Button>
-            <Button fx:id="completeButton" layoutX="22.0" layoutY="488.0" mnemonicParsing="false" onAction="#clickedCompleteButton" text="Check/Uncheck" />
-            <Button fx:id="filterCompButton" layoutX="120.0" layoutY="488.0" mnemonicParsing="false" onAction="#clickedFilterComp" text="Display Complete">
+            <Button fx:id="filterCompButton" layoutX="22.0" layoutY="488.0" mnemonicParsing="false" onAction="#clickedFilterComp" text="Display Complete">
                <padding>
                   <Insets bottom="4.0" left="12.0" right="13.0" top="4.0" />
                </padding>
             </Button>
-            <Button fx:id="filterIncompButton" layoutX="120.0" layoutY="514.0" mnemonicParsing="false" onAction="#clickedFilterIncomp" text="Display Incomplete" />
-            <Button fx:id="filterAllButton" layoutX="120.0" layoutY="539.0" mnemonicParsing="false" onAction="#clickedFilterAll" text="Display All">
+            <Button fx:id="filterIncompButton" layoutX="22.0" layoutY="514.0" mnemonicParsing="false" onAction="#clickedFilterIncomp" text="Display Incomplete" />
+            <Button fx:id="filterAllButton" layoutX="22.0" layoutY="539.0" mnemonicParsing="false" onAction="#clickedFilterAll" text="Display All">
                <padding>
                   <Insets bottom="4.0" left="31.0" right="31.0" top="4.0" />
                </padding>
@@ -73,7 +77,8 @@
                <padding>
                   <Insets bottom="4.0" left="15.0" right="15.5" top="4.0" />
                </padding></Button>
-            <TextField fx:id="listTitleBox" layoutX="238.0" layoutY="488.0" prefHeight="25.0" prefWidth="288.0" promptText="Please Input List Title" />
+            <TextField fx:id="listTitleBox" layoutX="140.0" layoutY="488.0" prefHeight="25.0" prefWidth="386.0" promptText="Please Input List Title" />
+            <DatePicker fx:id="datePicker" layoutX="140.0" layoutY="514.0" onAction="#activatedDatePicker" />
          </children></AnchorPane>
   </items>
 </SplitPane>

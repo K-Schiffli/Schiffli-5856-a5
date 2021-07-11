@@ -1,3 +1,7 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  Copyright 2021 first_name last_name
+ */
 package Assignment04;
 
 import Assignment04.Lists.Items.ToDoItem;
@@ -5,8 +9,7 @@ import Assignment04.Lists.ToDoList;
 import com.google.gson.*;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class ListHandler {
 
@@ -72,5 +75,21 @@ public class ListHandler {
             System.out.println("Could not parse data");
             e.printStackTrace();
         }
+    }
+
+    //Create a function to filter the list items
+    public static List getFilteredItems(String filter) {
+
+        //Call the filterItems method of the ToDoList with false as the parameter
+        //and load the returned list into the table
+        if (filter.equals("true"))
+        {
+            return tdl.filterItems(true);
+        }
+        else if (filter.equals("false"))
+        {
+            return tdl.filterItems(false);
+        }
+        else return tdl.getItems();
     }
 }
