@@ -2,9 +2,10 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04;
+package ucf.assignments;
 
-import Assignment04.Lists.Items.ToDoItem;
+import ucf.assignments.ListHandler;
+import ucf.assignments.Lists.Items.ToDoItem;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

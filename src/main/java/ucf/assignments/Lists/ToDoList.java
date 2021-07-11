@@ -2,16 +2,16 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04.Lists;
+package ucf.assignments.Lists;
 
-import Assignment04.Lists.Items.ToDoItem;
+import ucf.assignments.Lists.Items.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoList {
 
-    //Create a List of ToDoitem objects
+    //Create a List of ToDoItem objects
     public List<ToDoItem> itemList = new ArrayList<>();
 
     //Create a method to create a new ToDoItem object and add it to the List of ToDoItem objects
@@ -32,7 +32,7 @@ public class ToDoList {
     }
 
     //Create a method to return all the items in the List of ToDoItem objects
-    public List getItems() {
+    public List<ToDoItem> getItems() {
 
         //Return the list of ToDoItems
         return itemList;

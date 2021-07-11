@@ -2,9 +2,10 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04.Lists;
+package ucf.assignments.Lists;
 
 import org.junit.jupiter.api.Test;
+import ucf.assignments.Lists.ToDoList;
 
 import static org.junit.jupiter.api.Assertions.*;
 

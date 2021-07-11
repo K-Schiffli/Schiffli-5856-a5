@@ -2,10 +2,10 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04;
+package ucf.assignments;
 
-import Assignment04.Lists.Items.ToDoItem;
-import Assignment04.Lists.ToDoList;
+import ucf.assignments.Lists.ToDoList;
+import ucf.assignments.Lists.Items.ToDoItem;
 import com.google.gson.*;
 
 import java.io.*;
@@ -78,7 +78,7 @@ public class ListHandler {
     }
 
     //Create a function to filter the list items
-    public static List getFilteredItems(String filter) {
+    public static List<ToDoItem> getFilteredItems(String filter) {
 
         //Call the filterItems method of the ToDoList with false as the parameter
         //and load the returned list into the table

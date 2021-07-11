@@ -2,7 +2,7 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04.Lists.Items;
+package ucf.assignments.Lists.Items;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;

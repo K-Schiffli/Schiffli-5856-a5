@@ -2,15 +2,16 @@
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Kevin Schiffli
  */
-package Assignment04;
+package ucf.assignments;
 
-import Assignment04.Lists.Items.ToDoItem;
+import ucf.assignments.Lists.Items.ToDoItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.*;
+
 import java.io.File;
 import java.time.LocalDate;
 
