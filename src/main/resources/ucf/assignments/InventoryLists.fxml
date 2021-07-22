@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.InventoryListsController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+             <TableView fx:id="itemsTable" editable="true" layoutX="22.0" layoutY="44.0" prefHeight="517.0" prefWidth="758.0">
+                 <columns>
+                     <TableColumn fx:id="serialNumberColumn" onEditCancel="#editSerialNumberEnd" onEditCommit="#editedSerialNumber" prefWidth="132.0" text="Serial Number">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="serialNum" />
+                         </cellValueFactory>
+                         <cellFactory>
+                             <TextFieldTableCell fx:factory="forTableColumn" />
+                         </cellFactory>
+                     </TableColumn>
+                     <TableColumn fx:id="priceColumn" onEditCancel="#editPriceEnd" onEditCommit="#editedPrice" prefWidth="133.0" text="Price">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="price" />
+                         </cellValueFactory>
+                         <cellFactory>
+                             <TextFieldTableCell fx:factory="forTableColumn" />
+                         </cellFactory>
+                     </TableColumn>
+                     <TableColumn fx:id="nameColumn" maxWidth="564.0" onEditCancel="#editNameEnd" onEditCommit="#editedName" prefWidth="492.0" text="Item Name">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="name" />
+                         </cellValueFactory>
+                         <cellFactory>
+                             <TextFieldTableCell fx:factory="forTableColumn" />
+                         </cellFactory>
+                     </TableColumn>
+                 </columns>
+             </TableView>
+            <TextField fx:id="listTitleBox" layoutX="254.0" layoutY="19.0" prefHeight="25.0" prefWidth="345.0" promptText="Please Input List Title" />
+            <Button fx:id="helpButton" layoutX="22.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickedHelp" prefHeight="25.0" prefWidth="58.0" text="Help" />
+            <MenuButton fx:id="saveButton" layoutX="138.0" layoutY="19.0" mnemonicParsing="false" prefWidth="58.0" text="Save">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+            <MenuButton fx:id="loadButton" layoutX="196.0" layoutY="19.0" mnemonicParsing="false" text="Load">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+            <MenuButton layoutX="22.0" layoutY="560.0" mnemonicParsing="false" text="Search">
+              <items>
+                <MenuItem fx:id="searchBySerialNumButton" mnemonicParsing="false" onAction="#clickedSearchBySerialNum" text="By Serial Number " />
+                <MenuItem fx:id="searchByNameButton" mnemonicParsing="false" onAction="#clickedSearchByName" text="By Name" />
+              </items>
+            </MenuButton>
+            <MenuButton fx:id="editButton" layoutX="80.0" layoutY="19.0" mnemonicParsing="false" prefWidth="58.0" text="Edit">
+              <items>
+                <MenuItem fx:id="addItemButton" mnemonicParsing="false" onAction="#clickedAddItem" text="Add New Item" />
+                <MenuItem fx:id="deleteItemButton" mnemonicParsing="false" onAction="#clickedDeleteItem" text="Delete Selected Item" />
+                  <MenuItem fx:id="clearListButton" mnemonicParsing="false" onAction="#clickedClearList" text="Clear List" />
+              </items>
+            </MenuButton>
+            <TextField layoutX="90.0" layoutY="560.0" promptText="Enter Search Term" />
+         </children></AnchorPane>
+  </items>
+</SplitPane>

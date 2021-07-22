@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ToDoLists extends Application {
+public class InventoryLists extends Application {
 
     public static void main(String[] args) {
 
@@ -23,14 +23,14 @@ public class ToDoLists extends Application {
     public void start(Stage primaryStage) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("ToDoLists.fxml"));
+            root = FXMLLoader.load(getClass().getResource("InventoryLists.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("ToDo Lists");
+        primaryStage.setTitle("Inventory Lists");
         primaryStage.show();
     }
 }

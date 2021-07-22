@@ -5,14 +5,13 @@
 package ucf.assignments.Lists;
 
 import org.junit.jupiter.api.Test;
-import ucf.assignments.Lists.ToDoList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ToDoListTest {
+class InventoryListTest {
 
     //Create a new ToDoList object
-    ToDoList tdl = new ToDoList();
+    InventoryList tdl = new InventoryList();
 
     @Test
     void validateDesc_should_return_true_for_valid_descriptions() {

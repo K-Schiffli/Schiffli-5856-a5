@@ -4,7 +4,7 @@
  */
 package ucf.assignments;
 
-import ucf.assignments.Lists.Items.ToDoItem;
+import ucf.assignments.Lists.Items.InventoryItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,42 +15,34 @@ import javafx.stage.*;
 import java.io.File;
 import java.time.LocalDate;
 
-public class ToDoListsController {
-    public TableView<ToDoItem> itemsTable;
-    public TableColumn<ToDoItem, Boolean> doneColumn;
-    public TableColumn<Object, String> dueDateColumn;
-    public TableColumn<Object,String> descriptionColumn;
-    public Button newItemButton;
-    public Button deleteItemButton;
+public class InventoryListsController {
+    public TableView<InventoryItem> itemsTable;
+    public TableColumn<InventoryItem, String> serialNumberColumn;
+    public TableColumn<InventoryItem, String> priceColumn;
+    public TableColumn<InventoryItem,String> nameColumn;
     public Button saveListButton;
     public Button loadListButton;
     public TextField listTitleBox;
-    public Button filterIncompButton;
-    public Button filterAllButton;
-    public Button filterCompButton;
-    public Button clearListButton;
-    public DatePicker datePicker;
     public Button helpButton;
+    public MenuItem deleteItemButton;
+    public MenuItem clearListButton;
+    public MenuItem addItemButton;
+    public MenuButton editButton;
+    public MenuItem searchByNameButton;
+    public MenuItem searchBySerialNumButton;
 
     //Create a variable for the last chosen file directory for the save/load functions
     File lastChosenDirectory = null;
-    String filter = "all";
+    String searchTerm = "";
+    String searchColumn = "Show All";
 
+    private final ObservableList<InventoryItem> items = FXCollections.observableArrayList();
+    private final ObservableList<InventoryItem> currentItems = FXCollections.observableArrayList();
 
-    private final ObservableList<ToDoItem> items = FXCollections.observableArrayList();
-    private final ObservableList<ToDoItem> currentItems = FXCollections.observableArrayList();
-
-    public void initialize() {
-        //This callback tell the cell how to bind the data model 'Registered' property to
-        //the cell, itself.
-        doneColumn.setCellValueFactory(
-                param -> param.getValue().completeness);
-    }
-
-    public void editedDescription(TableColumn.CellEditEvent editedCell) {
+    public void editedName(TableColumn.CellEditEvent editedCell) {
 
         //Get the currently selected item
-        ToDoItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
 
         //If the selected item exists...
         if (selItem != null) {
@@ -65,23 +57,23 @@ public class ToDoListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getFilteredItems(filter));
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
 
-    public void clickedNewItem(ActionEvent actionEvent) {
+    public void clickedAddItem(ActionEvent actionEvent) {
         //Call the addItem method of the ToDoList
         ListHandler.tdl.addItem();
         //Clear current filter and refresh the displayed list
         itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getFilteredItems("all"));
+        currentItems.addAll(ListHandler.getSearchItems("", "Show All"));
         itemsTable.setItems(currentItems);
     }
 
     public void clickedDeleteItem(ActionEvent actionEvent) {
         //Get the selected ToDoItem
-        ToDoItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
 
         //If the selected item exists...
         if (selItem != null) {
@@ -95,7 +87,7 @@ public class ToDoListsController {
 
                 //Refresh the displayed list
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getFilteredItems(filter));
+                currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -152,36 +144,10 @@ public class ToDoListsController {
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getFilteredItems("all"));
+                currentItems.addAll(ListHandler.getSearchItems("", "Show All"));
                 itemsTable.setItems(currentItems);
             }
         }
-    }
-
-    public void clickedFilterComp(ActionEvent actionEvent) {
-        //Call the filterItems method of the ToDoList with true as the parameter
-        //and load the returned list into the table
-        filter = "true";
-        itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getFilteredItems(filter));
-        itemsTable.setItems(currentItems);
-    }
-
-    public void clickedFilterIncomp(ActionEvent actionEvent) {
-        //Call the filterItems method of the ToDoList with false as the parameter
-        //and load the returned list into the table
-        filter = "false";
-        itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getFilteredItems(filter));
-        itemsTable.setItems(currentItems);
-    }
-
-    public void clickedFilterAll(ActionEvent actionEvent) {
-        //Refresh the table by calling the getItems method of the ToDoList object
-        filter = "all";
-        itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getFilteredItems(filter));
-        itemsTable.setItems(currentItems);
     }
 
     public void clickedClearList(ActionEvent actionEvent) {
@@ -202,10 +168,10 @@ public class ToDoListsController {
         }
     }
 
-    public void editDescriptionEnd(TableColumn.CellEditEvent<?,?> editedCell) {
+    public void editNameEnd(TableColumn.CellEditEvent<?,?> editedCell) {
 
         //Get the currently selected item
-        ToDoItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
 
         //If the selected item exists...
         if (selItem != null) {
@@ -220,29 +186,9 @@ public class ToDoListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getFilteredItems(filter));
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
-    }
-
-    public void activatedDatePicker(ActionEvent actionEvent) {
-        //Get the selected item
-        ToDoItem selItem = itemsTable.getSelectionModel().getSelectedItem();
-
-        //If the selected item exists...
-        if (selItem != null) {
-            //If the selected item exists, get the selected date from the datePicker
-            LocalDate date = datePicker.getValue();
-            //Convert it to a string
-            String dateString = date.toString();
-            selItem.setDueDate(dateString);
-            //Refresh the displayed items
-            itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getFilteredItems(filter));
-            itemsTable.setItems(currentItems);
-        }
-        //Clear the text from the datePicker
-        datePicker.getEditor().clear();
     }
 
     public void clickedHelp(ActionEvent actionEvent) {
@@ -257,7 +203,101 @@ public class ToDoListsController {
                 "To filter the list, click the \"Show Complete\", \"Show Incomplete\", or \"Show All\" buttons.\n\n" +
                 "To save a list, enter a name for it in the box at the bottom and click the \"Save List\" button.\n\n" +
                 "To load a list, click the \"Load List\" button and choose the list you want to load. This will clear the current list.\n\n" +
-                "This help screen is dedicated to Rey.", ButtonType.OK);
+                "This help screen is dedicated to everyone except Rey.", ButtonType.OK);
         alert.showAndWait();
+    }
+
+    public void editedSerialNumber(TableColumn.CellEditEvent<InventoryItem, String> editedCell) {
+        //Get the currently selected item
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+
+        //If the selected item exists...
+        if (selItem != null) {
+            //Get the new description from the box
+            String newSerialNum = editedCell.getNewValue().toString();
+
+            //Validate the description
+            //If the description is within length requirements, set it as the new description
+            if (ListHandler.tdl.validateDesc(newSerialNum)) selItem.setSerialNum(newSerialNum);
+                //Else notify the user of the constraint
+            else selItem.setDescription("Description must be less than 256 characters.");
+
+            //Refresh the displayed items
+            itemsTable.getItems().clear();
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            itemsTable.setItems(currentItems);
+        }
+    }
+
+    public void editSerialNumberEnd(TableColumn.CellEditEvent<InventoryItem, String> editedCell) {
+        //Get the currently selected item
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+
+        //If the selected item exists...
+        if (selItem != null) {
+            //Get the new description from the box
+            String newSerialNum = editedCell.getNewValue().toString();
+
+            //Validate the description
+            //If the description is within length requirements, set it as the new description
+            if (ListHandler.tdl.validateDesc(newSerialNum)) selItem.setSerialNum(newSerialNum);
+                //Else notify the user of the constraint
+            else selItem.setDescription("Description must be less than 256 characters.");
+
+            //Refresh the displayed items
+            itemsTable.getItems().clear();
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            itemsTable.setItems(currentItems);
+        }
+    }
+
+    public void editedPrice(TableColumn.CellEditEvent<InventoryItem, String> editedCell) {
+        //Get the currently selected item
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+
+        //If the selected item exists...
+        if (selItem != null) {
+            //Get the new description from the box
+            String newPrice = editedCell.getNewValue().toString();
+
+            //Validate the description
+            //If the description is within length requirements, set it as the new description
+            if (ListHandler.tdl.validateDesc(newPrice)) selItem.setPrice(newPrice);
+                //Else notify the user of the constraint
+            else selItem.setDescription("Description must be less than 256 characters.");
+
+            //Refresh the displayed items
+            itemsTable.getItems().clear();
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            itemsTable.setItems(currentItems);
+        }
+    }
+    
+    public void editPriceEnd(TableColumn.CellEditEvent<InventoryItem, String> editedCell) {
+        //Get the currently selected item
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+
+        //If the selected item exists...
+        if (selItem != null) {
+            //Get the new description from the box
+            String newPrice = editedCell.getNewValue().toString();
+
+            //Validate the description
+            //If the description is within length requirements, set it as the new description
+            if (ListHandler.tdl.validateDesc(newPrice)) selItem.setPrice(newPrice);
+                //Else notify the user of the constraint
+            else selItem.setDescription("Description must be less than 256 characters.");
+
+            //Refresh the displayed items
+            itemsTable.getItems().clear();
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            itemsTable.setItems(currentItems);
+        }
+    }
+
+    public void clickedSearchBySerialNum(ActionEvent actionEvent) {
+    }
+
+    public void clickedSearchByName(ActionEvent actionEvent) {
     }
 }

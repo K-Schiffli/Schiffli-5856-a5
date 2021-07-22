@@ -4,8 +4,8 @@
  */
 package ucf.assignments;
 
-import ucf.assignments.Lists.ToDoList;
-import ucf.assignments.Lists.Items.ToDoItem;
+import ucf.assignments.Lists.InventoryList;
+import ucf.assignments.Lists.Items.InventoryItem;
 import com.google.gson.*;
 
 import java.io.*;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ListHandler {
 
     //Create a new ToDoList object
-    static ToDoList tdl = new ToDoList();
+    static InventoryList tdl = new InventoryList();
 
     //Create a method to save a single list
     public static void saveList(String folderPath, String listTitle) {
@@ -25,9 +25,9 @@ public class ListHandler {
             fw.write("{\n\t\"items\": [{\n");
             for (int i = 0; i < tdl.itemList.size(); i++) {
             //Because each object is simple enough, serialize it manually
-                fw.write("\t\"completeness\": " + tdl.itemList.get(i).getCompleteness()+",\n");
-                fw.write("\t\t\t\"dueDate\": \"" + tdl.itemList.get(i).getDueDate()+"\",\n");
-                fw.write("\t\t\t\"description\": \"" + tdl.itemList.get(i).getDescription()+"\"\n");
+                fw.write("\t\"serialNum\": " + tdl.itemList.get(i).getSerialNum()+",\n");
+                fw.write("\t\t\t\"price\": \"" + tdl.itemList.get(i).getPrice()+"\",\n");
+                fw.write("\t\t\t\"name\": \"" + tdl.itemList.get(i).getName()+"\"\n");
                 if (i+1 == tdl.itemList.size()) fw.write("\n\t\t}");
                 else fw.write("\n\t\t},\n\t\t{");
             }
@@ -62,12 +62,12 @@ public class ListHandler {
             //Loop through the array and parse the json into separate fields
             for (JsonElement itemElement : jsonArrayOfItems) {
                 JsonObject itemJsonObject = itemElement.getAsJsonObject();
-                boolean completeness = itemJsonObject.get("completeness").getAsBoolean();
-                String dueDate = itemJsonObject.get("dueDate").getAsString();
-                String description = itemJsonObject.get("description").getAsString();
+                String serialNum = itemJsonObject.get("serialNum").getAsString();
+                String price = itemJsonObject.get("price").getAsString();
+                String name = itemJsonObject.get("name").getAsString();
 
                 //Build a new ToDoList object and add it to a list of Products
-                ToDoItem item = new ToDoItem(completeness, dueDate, description);
+                InventoryItem item = new InventoryItem(serialNum, price, name);
                 tdl.itemList.add(item);
             }
             //Catch any exceptions thrown and print ane error message and the stack trace
@@ -77,18 +77,11 @@ public class ListHandler {
         }
     }
 
-    //Create a function to filter the list items
-    public static List<ToDoItem> getFilteredItems(String filter) {
+    //Create a function to search the list items
+    public static List<InventoryItem> getSearchItems(String searchTerm, String searchColumn) {
 
-        //Call the filterItems method of the ToDoList with false as the parameter
-        //and load the returned list into the table
-        if (filter.equals("true"))
-        {
-            return tdl.filterItems(true);
-        }
-        else if (filter.equals("false"))
-        {
-            return tdl.filterItems(false);
+        if (!searchTerm.equals("")&&!searchColumn.equals("Show All")) {
+            return tdl.searchItems(searchTerm, searchColumn);
         }
         else return tdl.getItems();
     }
