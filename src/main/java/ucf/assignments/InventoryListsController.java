@@ -13,7 +13,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.*;
 
 import java.io.File;
-import java.time.LocalDate;
 
 public class InventoryListsController {
     public TableView<InventoryItem> itemsTable;
@@ -30,6 +29,7 @@ public class InventoryListsController {
     public MenuButton editButton;
     public MenuItem searchByNameButton;
     public MenuItem searchBySerialNumButton;
+    public TextField searchTermBox;
 
     //Create a variable for the last chosen file directory for the save/load functions
     File lastChosenDirectory = null;
@@ -41,10 +41,10 @@ public class InventoryListsController {
 
     public void clickedAddItem(ActionEvent actionEvent) {
         //Call the addItem method of the ToDoList
-        ListHandler.tdl.addItem();
+        ListHandler.il.addItem();
         //Clear current filter and refresh the displayed list
         itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getSearchItems("", "Show All"));
+        currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
         itemsTable.setItems(currentItems);
     }
 
@@ -60,11 +60,11 @@ public class InventoryListsController {
 
             if (alert.getResult() == ButtonType.YES) {
                 //If the user selects Yes, call the removeItem method of the current object with the selected item
-                ListHandler.tdl.removeItem(selItem);
+                ListHandler.il.removeItem(selItem);
 
                 //Refresh the displayed list
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+                currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -121,7 +121,7 @@ public class InventoryListsController {
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchItems("", "Show All"));
+                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -134,9 +134,9 @@ public class InventoryListsController {
 
         if (alert.getResult() == ButtonType.YES) {
             //If the user clicks Yes, loop through the list of ToDoList items and call the removeItem method on each one.
-            int length = ListHandler.tdl.getItems().size();
+            int length = ListHandler.il.getItems().size();
             for (int i = (length - 1); i >= 0; i--){
-                ListHandler.tdl.removeItem(ListHandler.tdl.itemList.get(i));
+                ListHandler.il.removeItem(ListHandler.il.itemList.get(i));
             }
 
             //Clear the displayed items
@@ -157,14 +157,14 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateName(newName)) selItem.setName(newName);
+            if (ListHandler.il.validateName(newName)) selItem.setName(newName);
             //Else notify the user of the constraint
             Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
             alert.showAndWait();
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -181,14 +181,14 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateName(newName)) selItem.setName(newName);
+            if (ListHandler.il.validateName(newName)) selItem.setName(newName);
                 //Else notify the user of the constraint
             Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
             alert.showAndWait();
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -204,24 +204,24 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (!ListHandler.tdl.validateSerialNum(newSerialNum)) {
+            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
             }
-            else if (ListHandler.tdl.checkForSerialNumDupe(newSerialNum)){
+            else if (ListHandler.il.checkForSerialNumDupe(newSerialNum)){
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
                 alert.showAndWait();
             }
             //If it checks out, set it as the new serial number
             else
             {
-                selItem.setName(newSerialNum);
+                selItem.setSerialNum(newSerialNum);
             }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -237,24 +237,24 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (!ListHandler.tdl.validateSerialNum(newSerialNum)) {
+            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
             }
-            else if (ListHandler.tdl.checkForSerialNumDupe(newSerialNum)){
+            else if (ListHandler.il.checkForSerialNumDupe(newSerialNum)){
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
                 alert.showAndWait();
             }
             //If it checks out, set it as the new serial number
             else
             {
-                selItem.setName(newSerialNum);
+                selItem.setSerialNum(newSerialNum);
             }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -270,14 +270,16 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validatePrice(newPrice)) selItem.setPrice(newPrice);
-                //Else notify the user of the constraint
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
-            alert.showAndWait();
+            if (ListHandler.il.validatePrice(newPrice)) selItem.setPrice(newPrice);
+            //Else notify the user of the constraint
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+                alert.showAndWait();
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -293,22 +295,44 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validatePrice(newPrice)) selItem.setPrice(newPrice);
-                //Else notify the user of the constraint
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
-            alert.showAndWait();
+            if (ListHandler.il.validatePrice(newPrice)) selItem.setPrice(newPrice);
+            //Else notify the user of the constraint
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+                alert.showAndWait();
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
 
     public void clickedSearchBySerialNum(ActionEvent actionEvent) {
+        //Set the searchColumn variable to the selected column
+        searchColumn = "serialNum";
+
+        //Get the search term from the box
+        searchTerm = searchTermBox.getText();
+
+        //Call the search function and load that into the table
+        itemsTable.getItems().clear();
+        currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+        itemsTable.setItems(currentItems);
     }
 
     public void clickedSearchByName(ActionEvent actionEvent) {
+        //Set the searchColumn variable to the selected column
+        searchColumn = "name";
+
+        //Get the search term from the box
+        searchTerm = searchTermBox.getText();
+
+        //Call the search function and load that into the table
+        itemsTable.getItems().clear();
+        currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+        itemsTable.setItems(currentItems);
     }
 
     public void clickedHelp(ActionEvent actionEvent) {

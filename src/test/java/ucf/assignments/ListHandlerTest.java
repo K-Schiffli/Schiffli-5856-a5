@@ -21,29 +21,29 @@ class ListHandlerTest {
         //Populate the itemList list in the ToDoList object with test items
         //Populate the expected list with every item at the same time
         InventoryItem testItem = new InventoryItem("XXXXXXXXXX", "2021-07-11", "Turn in programming assignment");
-        ListHandler.tdl.itemList.add(testItem);
+        ListHandler.il.itemList.add(testItem);
         expected.add(testItem);
         testItem = new InventoryItem("XXXXXXXXXX", "2021-07-13", "Feed the cat");
-        ListHandler.tdl.itemList.add(testItem);
+        ListHandler.il.itemList.add(testItem);
         expected.add(testItem);
         testItem = new InventoryItem("XXXXXXXXXX", "2021-07-08", "Take out the trash");
-        ListHandler.tdl.itemList.add(testItem);
+        ListHandler.il.itemList.add(testItem);
         expected.add(testItem);
         testItem = new InventoryItem("XXXXXXXXXX", "2021-07-28", "Get a job");
-        ListHandler.tdl.itemList.add(testItem);
+        ListHandler.il.itemList.add(testItem);
         expected.add(testItem);
 
         //Run the saveList method with a test file path
         ListHandler.saveList("TestSaves","TestList");
 
         //Clear the itemsList
-        ListHandler.tdl.itemList.clear();
+        ListHandler.il.itemList.clear();
 
         //Run the loadList method on the save file that should now exist
         ListHandler.loadList("TestSaves/TestList.json");
 
         //Get the repopulated list
-        List<InventoryItem> result = ListHandler.tdl.getItems();
+        List<InventoryItem> result = ListHandler.il.getItems();
 
         //Assert that every item in the result list is present in the expected list
         for (int i = 0; i < expected.size(); i++) {
@@ -52,6 +52,6 @@ class ListHandlerTest {
             assertEquals(expected.get(i).getName(), result.get(i).getName());
         }
         //Clear the itemsList
-        ListHandler.tdl.itemList.clear();
+        ListHandler.il.itemList.clear();
     }
 }

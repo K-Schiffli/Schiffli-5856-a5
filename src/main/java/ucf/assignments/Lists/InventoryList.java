@@ -38,13 +38,24 @@ public class InventoryList {
         return itemList;
     }
 
-    //Create a method to search the list by completeness
+    //Create a method to search the list based on the term and the column
     public List<InventoryItem> searchItems(String searchTerm, String searchColumn) {
 
         //Create a new List of ToDoItems to hold the output
         List<InventoryItem> searchedItemList = new ArrayList<>();
 
         //Loop through the list
+        for (int i = 0; i < itemList.size(); i++)
+        {
+            if (searchColumn.equals("serialNum")&& itemList.get(i).getSerialNum().contains(searchTerm)) searchedItemList.add(itemList.get(i));
+            else if(searchColumn.equals("serialNum")&& itemList.get(i).getSerialNum().contains(searchTerm)) searchedItemList.add(itemList.get(i));
+        }
+        //If nothing is found, create a single item with a warning message
+        if (searchedItemList.size() == 0)
+        {
+            InventoryItem warningItem = new InventoryItem("", "", "No Items Found");
+            searchedItemList.add(warningItem);
+        }
 
         //Return the resulting list
         return searchedItemList;
@@ -65,19 +76,23 @@ public class InventoryList {
 
         //Check that the new serial number isn't duplicated
         for (InventoryItem inventoryItem : itemList) {
-            if (serialNum.equals(inventoryItem.getSerialNum())) return false;
+            if (serialNum.equals(inventoryItem.getSerialNum())) return true;
         }
-        return true;
+        return false;
     }
 
     public boolean validatePrice(String price) {
         //Check that the price is the correct format
 
         //Check that the third-from-last character is a decimal point.
-        if (price.charAt(price.length() - 3) != '.') return false;
-        else if (price.charAt(1) != '$') return false;
-        else if (price.charAt(2) == '0') return false;
-        for (int i = 1; i < price.length(); i++)
+        if (price.charAt(0) != '$') return false;
+        else if (price.charAt(1) == '0') return false;
+        else if (price.charAt(price.length() - 3) != '.') return false;
+        for (int i = 1; i < price.length() - 4; i++)
+        {
+            if (price.charAt(i) < '0' || price.charAt(i) > '9') return false;
+        }
+        for (int i = price.length() - 2; i < price.length(); i++)
         {
             if (price.charAt(i) < '0' || price.charAt(i) > '9') return false;
         }

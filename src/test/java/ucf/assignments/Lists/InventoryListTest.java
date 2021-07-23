@@ -61,7 +61,7 @@ class InventoryListTest {
     }
 
     @Test
-    void validateSerialNum() {
+    void validateSerialNum_should_validate_for_valid_numbers() {
     }
 
     @Test
@@ -69,7 +69,38 @@ class InventoryListTest {
     }
 
     @Test
-    void validatePrice() {
+    void validatePrice_should_validate_valid_prices() {
+        //Create a valid price
+        String price = "$12.50";
+        assertTrue(tdl.validatePrice(price));
+    }
+
+    @Test
+    void validatePrice_should_invalidate_too_short_prices() {
+        //Create an invalid price
+        String price = "$12.5";
+        assertFalse(tdl.validatePrice(price));
+    }
+
+    @Test
+    void validatePrice_should_invalidate_too_long_prices() {
+        //Create an invalid price
+        String price = "$12.567";
+        assertFalse(tdl.validatePrice(price));
+    }
+
+    @Test
+    void validatePrice_should_invalidate_prices_with_leading_0s() {
+        //Create an invalid price
+        String price = "$02.54";
+        assertFalse(tdl.validatePrice(price));
+    }
+
+    @Test
+    void validatePrice_should_invalidate_prices_without_dollar_signs() {
+        //Create an invalid price
+        String price = "12.50";
+        assertFalse(tdl.validatePrice(price));
     }
 
 }

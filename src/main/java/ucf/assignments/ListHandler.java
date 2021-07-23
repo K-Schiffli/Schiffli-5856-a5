@@ -14,7 +14,7 @@ import java.util.List;
 public class ListHandler {
 
     //Create a new ToDoList object
-    static InventoryList tdl = new InventoryList();
+    static InventoryList il = new InventoryList();
 
     //Create a method to save a single list
     public static void saveList(String folderPath, String listTitle) {
@@ -23,12 +23,12 @@ public class ListHandler {
             //Create an instance of the FileWriter class and pass it the name of the file
             FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".json");
             fw.write("{\n\t\"items\": [{\n");
-            for (int i = 0; i < tdl.itemList.size(); i++) {
+            for (int i = 0; i < il.itemList.size(); i++) {
             //Because each object is simple enough, serialize it manually
-                fw.write("\t\"serialNum\": " + tdl.itemList.get(i).getSerialNum()+",\n");
-                fw.write("\t\t\t\"price\": \"" + tdl.itemList.get(i).getPrice()+"\",\n");
-                fw.write("\t\t\t\"name\": \"" + tdl.itemList.get(i).getName()+"\"\n");
-                if (i+1 == tdl.itemList.size()) fw.write("\n\t\t}");
+                fw.write("\t\"serialNum\": " + il.itemList.get(i).getSerialNum()+",\n");
+                fw.write("\t\t\t\"price\": \"" + il.itemList.get(i).getPrice()+"\",\n");
+                fw.write("\t\t\t\"name\": \"" + il.itemList.get(i).getName()+"\"\n");
+                if (i+1 == il.itemList.size()) fw.write("\n\t\t}");
                 else fw.write("\n\t\t},\n\t\t{");
             }
             fw.write("\n\t]\n}");
@@ -45,9 +45,9 @@ public class ListHandler {
     public static void loadList (String filePath)
     {
         //Clear the current ToDoItems list
-        int length = tdl.getItems().size();
+        int length = il.getItems().size();
         for (int i = (length - 1); i >= 0; i--){
-            tdl.removeItem(tdl.itemList.get(i));
+            il.removeItem(il.itemList.get(i));
         }
         //Create a File object to read the data from
         File inputFile = new File(filePath);
@@ -68,7 +68,7 @@ public class ListHandler {
 
                 //Build a new ToDoList object and add it to a list of Products
                 InventoryItem item = new InventoryItem(serialNum, price, name);
-                tdl.itemList.add(item);
+                il.itemList.add(item);
             }
             //Catch any exceptions thrown and print ane error message and the stack trace
         } catch (FileNotFoundException e) {
@@ -78,11 +78,11 @@ public class ListHandler {
     }
 
     //Create a function to search the list items
-    public static List<InventoryItem> getSearchItems(String searchTerm, String searchColumn) {
+    public static List<InventoryItem> getSearchedItems(String searchTerm, String searchColumn) {
 
         if (!searchTerm.equals("")&&!searchColumn.equals("Show All")) {
-            return tdl.searchItems(searchTerm, searchColumn);
+            return il.searchItems(searchTerm, searchColumn);
         }
-        else return tdl.getItems();
+        else return il.getItems();
     }
 }

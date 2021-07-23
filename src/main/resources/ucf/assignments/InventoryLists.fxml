@@ -70,7 +70,7 @@
                   <MenuItem fx:id="clearListButton" mnemonicParsing="false" onAction="#clickedClearList" text="Clear List" />
               </items>
             </MenuButton>
-            <TextField layoutX="90.0" layoutY="560.0" promptText="Enter Search Term" />
+            <TextField fx:id="searchTermBox" layoutX="90.0" layoutY="560.0" promptText="Enter Search Term" />
          </children></AnchorPane>
   </items>
 </SplitPane>
