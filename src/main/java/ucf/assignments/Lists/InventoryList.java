@@ -45,16 +45,11 @@ public class InventoryList {
         List<InventoryItem> searchedItemList = new ArrayList<>();
 
         //Loop through the list
-        for (int i = 0; i < itemList.size(); i++)
-        {
-            if (searchColumn.equals("serialNum")&& itemList.get(i).getSerialNum().contains(searchTerm)) searchedItemList.add(itemList.get(i));
-            else if(searchColumn.equals("serialNum")&& itemList.get(i).getSerialNum().contains(searchTerm)) searchedItemList.add(itemList.get(i));
-        }
-        //If nothing is found, create a single item with a warning message
-        if (searchedItemList.size() == 0)
-        {
-            InventoryItem warningItem = new InventoryItem("", "", "No Items Found");
-            searchedItemList.add(warningItem);
+        for (InventoryItem inventoryItem : itemList) {
+            if (searchColumn.equals("serialNum") && inventoryItem.getSerialNum().contains(searchTerm))
+                searchedItemList.add(inventoryItem);
+            else if (searchColumn.equals("name") && inventoryItem.getName().contains(searchTerm))
+                searchedItemList.add(inventoryItem);
         }
 
         //Return the resulting list
@@ -63,13 +58,13 @@ public class InventoryList {
 
     public boolean validateSerialNum(String serialNum) {
         //Check that the serial number is the correct length
-        if (serialNum.length() != 10) return false;
+        if (serialNum.length() != 10) return true;
 
         //Check that the serial number contains only characters and digits
         for (int i = 0; i < serialNum.length(); i++) {
-            if (!Character.isLetterOrDigit(serialNum.charAt(i))) return false;
+            if (!Character.isLetterOrDigit(serialNum.charAt(i))) return true;
         }
-        return true;
+        return false;
     }
 
     public boolean checkForSerialNumDupe(String serialNum) {

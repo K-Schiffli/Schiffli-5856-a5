@@ -204,7 +204,7 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
+            if (ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
@@ -237,7 +237,7 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
+            if (ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
