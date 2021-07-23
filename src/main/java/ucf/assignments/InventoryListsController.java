@@ -39,29 +39,6 @@ public class InventoryListsController {
     private final ObservableList<InventoryItem> items = FXCollections.observableArrayList();
     private final ObservableList<InventoryItem> currentItems = FXCollections.observableArrayList();
 
-    public void editedName(TableColumn.CellEditEvent editedCell) {
-
-        //Get the currently selected item
-        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
-
-        //If the selected item exists...
-        if (selItem != null) {
-            //Get the new description from the box
-            String newDescription = editedCell.getNewValue().toString();
-
-            //Validate the description
-            //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newDescription)) selItem.setDescription(newDescription);
-                //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
-
-            //Refresh the displayed items
-            itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
-            itemsTable.setItems(currentItems);
-        }
-    }
-
     public void clickedAddItem(ActionEvent actionEvent) {
         //Call the addItem method of the ToDoList
         ListHandler.tdl.addItem();
@@ -168,7 +145,7 @@ public class InventoryListsController {
         }
     }
 
-    public void editNameEnd(TableColumn.CellEditEvent<?,?> editedCell) {
+    public void editedName(TableColumn.CellEditEvent editedCell) {
 
         //Get the currently selected item
         InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
@@ -176,13 +153,14 @@ public class InventoryListsController {
         //If the selected item exists...
         if (selItem != null) {
             //Get the new description from the box
-            String newDescription = editedCell.getNewValue().toString();
+            String newName = editedCell.getNewValue().toString();
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newDescription)) selItem.setDescription(newDescription);
-                //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
+            if (ListHandler.tdl.validateName(newName)) selItem.setName(newName);
+            //Else notify the user of the constraint
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
+            alert.showAndWait();
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -191,20 +169,28 @@ public class InventoryListsController {
         }
     }
 
-    public void clickedHelp(ActionEvent actionEvent) {
-        //Display an information pop-up with instructions
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "To add a new item, click the \"New Item\" button.\n\n" +
-                "To edit an it's description, double-click its description box. Press enter to save your changes.\n\n" +
-                "To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.\n\n" +
-                "To mark an item as complete, click the check box next to it.\n\n" +
-                "To delete an item, click on it to select it and click the \"Delete Item\" button.\n\n" +
-                "To clear the list, click the \"Clear List\" button.\n\n" +
-                "To sort the list, double-click the header of the column you want the list sorted by.\n\n" +
-                "To filter the list, click the \"Show Complete\", \"Show Incomplete\", or \"Show All\" buttons.\n\n" +
-                "To save a list, enter a name for it in the box at the bottom and click the \"Save List\" button.\n\n" +
-                "To load a list, click the \"Load List\" button and choose the list you want to load. This will clear the current list.\n\n" +
-                "This help screen is dedicated to everyone except Rey.", ButtonType.OK);
-        alert.showAndWait();
+    public void editNameEnd(TableColumn.CellEditEvent<?,?> editedCell) {
+
+        //Get the currently selected item
+        InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
+
+        //If the selected item exists...
+        if (selItem != null) {
+            //Get the new description from the box
+            String newName= editedCell.getNewValue().toString();
+
+            //Validate the description
+            //If the description is within length requirements, set it as the new description
+            if (ListHandler.tdl.validateName(newName)) selItem.setName(newName);
+                //Else notify the user of the constraint
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
+            alert.showAndWait();
+
+            //Refresh the displayed items
+            itemsTable.getItems().clear();
+            currentItems.addAll(ListHandler.getSearchItems(searchTerm, searchColumn));
+            itemsTable.setItems(currentItems);
+        }
     }
 
     public void editedSerialNumber(TableColumn.CellEditEvent<InventoryItem, String> editedCell) {
@@ -213,14 +199,25 @@ public class InventoryListsController {
 
         //If the selected item exists...
         if (selItem != null) {
-            //Get the new description from the box
+            //Get the new serial number from the box
             String newSerialNum = editedCell.getNewValue().toString();
 
-            //Validate the description
-            //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newSerialNum)) selItem.setSerialNum(newSerialNum);
+            //Validate the serial number
+            //Check that the serial number matches the required format and it's not a duplication
+            if (!ListHandler.tdl.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
+                alert.showAndWait();
+            }
+            else if (ListHandler.tdl.checkForSerialNumDupe(newSerialNum)){
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
+                alert.showAndWait();
+            }
+            //If it checks out, set it as the new serial number
+            else
+            {
+                selItem.setName(newSerialNum);
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -235,14 +232,25 @@ public class InventoryListsController {
 
         //If the selected item exists...
         if (selItem != null) {
-            //Get the new description from the box
+            //Get the new serial number from the box
             String newSerialNum = editedCell.getNewValue().toString();
 
-            //Validate the description
-            //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newSerialNum)) selItem.setSerialNum(newSerialNum);
+            //Validate the serial number
+            //Check that the serial number matches the required format and it's not a duplication
+            if (!ListHandler.tdl.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
+                alert.showAndWait();
+            }
+            else if (ListHandler.tdl.checkForSerialNumDupe(newSerialNum)){
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
+                alert.showAndWait();
+            }
+            //If it checks out, set it as the new serial number
+            else
+            {
+                selItem.setName(newSerialNum);
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -262,9 +270,10 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newPrice)) selItem.setPrice(newPrice);
+            if (ListHandler.tdl.validatePrice(newPrice)) selItem.setPrice(newPrice);
                 //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+            alert.showAndWait();
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -284,9 +293,10 @@ public class InventoryListsController {
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
-            if (ListHandler.tdl.validateDesc(newPrice)) selItem.setPrice(newPrice);
+            if (ListHandler.tdl.validatePrice(newPrice)) selItem.setPrice(newPrice);
                 //Else notify the user of the constraint
-            else selItem.setDescription("Description must be less than 256 characters.");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+            alert.showAndWait();
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -300,4 +310,21 @@ public class InventoryListsController {
 
     public void clickedSearchByName(ActionEvent actionEvent) {
     }
+
+    public void clickedHelp(ActionEvent actionEvent) {
+        //Display an information pop-up with instructions
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "To add a new item, click the \"New Item\" button.\n\n" +
+                "To edit an it's description, double-click its description box. Press enter to save your changes.\n\n" +
+                "To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.\n\n" +
+                "To mark an item as complete, click the check box next to it.\n\n" +
+                "To delete an item, click on it to select it and click the \"Delete Item\" button.\n\n" +
+                "To clear the list, click the \"Clear List\" button.\n\n" +
+                "To sort the list, double-click the header of the column you want the list sorted by.\n\n" +
+                "To filter the list, click the \"Show Complete\", \"Show Incomplete\", or \"Show All\" buttons.\n\n" +
+                "To save a list, enter a name for it in the box at the bottom and click the \"Save List\" button.\n\n" +
+                "To load a list, click the \"Load List\" button and choose the list you want to load. This will clear the current list.\n\n" +
+                "This help screen is dedicated to everyone except Rey.", ButtonType.OK);
+        alert.showAndWait();
+    }
+
 }

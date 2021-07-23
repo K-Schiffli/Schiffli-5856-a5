@@ -1,73 +1,79 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-Class ToDoLists{
+Class InventoryLists{
 +load initial scene
 }
 
-Class ToDoListsController{
+Class InventoryListsController{
 --Methods--
 +Initialize()
-+editedDescription()
 +clickedNewItem()
 +clickedDeleteItem()
-+clickedSaveList()
-+clickedLoadList()
-+clickedFilterComp()
-+clickedFilterIncomp()
-+clickedFilterAll()
++clickedSaveListAsJSON()
++clickedLoadListAsJSON()
++clickedSaveListAsTSV()
++clickedLoadListAsTSV()
++clickedSaveListAsHTML()
++clickedLoadListAsHTML()
 +clickedClearList()
-+editDescriptionEnd()
-+activatedDatePicker()
++editedName()
++editNameEnd()
++editedPrice()
++editPriceEnd()
++editedSerialNum()
++editSerialNumEnd()
++clickedSearchByName()
++clickedSearchBySerialNum()
 +clickedHelp()
 }
 
 Class ListHandler{
 --Parameters--
-List<ToDoList>
+List<InventoryList>
 --Methods--
-+saveList()
-+loadList()
-+getFilteredItems()
++SaveListAsJSON()
++loadListAsJSON()
++SaveListAsTSV()
++loadListAsTSV()
++SaveListAsHTML()
++loadListAsHTML()
++getSearchedItems()
 }
 
-Class ToDoList{
+Class InventoryList{
 --Parameters--
 String
-List<ToDoItem>
+List<InventoryItem>
 --Methods--
 +addItem()
 +removeItem()
 +getItems()
-+filterItems()
-+validateDesc()
++searchItems()
++validateName()
++validatePrice()
++validateSerialNum()
++checkForSerialNumDupe()
 }
 
-Class ToDoItem{
+Class InventoryItem{
 --Parameters--
-String description
-String dueDate
-boolean completeness
+String name
+String price
+String serialNum
 --methods--
-+setItemDesc()
-+setItemDueDate()
-+setItemCompleteness()
-+getItemDesc()
-+getItemDueDate()
-+getItemCompleteness()
++setItemName()
++setItemPrice()
++setItemSerialNum()
++getItemName()
++getItemPrice()
++getItemSerialNum()
 }
 
-Class CheckBoxTableCellFactory{
-..Overrides..
-CheckBoxTableCell -> TableCell
-}
-
-
-ToDoLists ..|> ToDoListsController
-ToDoLists -- ListHandler
-ListHandler o- ToDoList
-ToDoList o- ToDoItem
-ToDoListsFXML <|- CheckBoxTableCellFactory
-ToDoListsFXML o- ToDoListsController
+InventoryLists ..|> InventoryListsController
+InventoryLists -- ListHandler
+ListHandler o- InventoryList
+InventoryList o- InventoryItem
+InventoryListsFXML o- InventoryListsController
 
 @enduml

@@ -50,8 +50,42 @@ public class InventoryList {
         return searchedItemList;
     }
 
-    public boolean validateDesc(String description) {
-        //Check that the description is no longer than than 256 characters
-        return description.length() <= 256 && description.length() != 0;
+    public boolean validateSerialNum(String serialNum) {
+        //Check that the serial number is the correct length
+        if (serialNum.length() != 10) return false;
+
+        //Check that the serial number contains only characters and digits
+        for (int i = 0; i < serialNum.length(); i++) {
+            if (!Character.isLetterOrDigit(serialNum.charAt(i))) return false;
+        }
+        return true;
+    }
+
+    public boolean checkForSerialNumDupe(String serialNum) {
+
+        //Check that the new serial number isn't duplicated
+        for (InventoryItem inventoryItem : itemList) {
+            if (serialNum.equals(inventoryItem.getSerialNum())) return false;
+        }
+        return true;
+    }
+
+    public boolean validatePrice(String price) {
+        //Check that the price is the correct format
+
+        //Check that the third-from-last character is a decimal point.
+        if (price.charAt(price.length() - 3) != '.') return false;
+        else if (price.charAt(1) != '$') return false;
+        else if (price.charAt(2) == '0') return false;
+        for (int i = 1; i < price.length(); i++)
+        {
+            if (price.charAt(i) < '0' || price.charAt(i) > '9') return false;
+        }
+        return true;
+    }
+
+    public boolean validateName(String name) {
+        //Check that the name is between 2 and 256 characters, inclusive
+        return name.length() <= 256 && name.length() >= 2;
     }
 }

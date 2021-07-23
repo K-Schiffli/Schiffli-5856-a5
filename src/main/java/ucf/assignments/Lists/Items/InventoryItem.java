@@ -34,7 +34,7 @@ public class InventoryItem {
     }
 
     //Create a setter method for the description
-    public void setDescription(String nameVal) {
+    public void setName(String nameVal) {
         name.set(nameVal);
     }
 
