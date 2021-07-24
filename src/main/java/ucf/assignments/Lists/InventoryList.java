@@ -174,7 +174,7 @@ public class InventoryList {
         //Enclose the file writing function in a try/catch in case the operation fails
         try {
             //Create an instance of the FileWriter class and pass it the name of the file
-            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".tsv");
+            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".txt");
             for (InventoryItem inventoryItem : itemList) {
                 //Because each object is simple enough, serialize it manually
                 fw.write(inventoryItem.getSerialNum() + "\t" + inventoryItem.getPrice() + "\t" + inventoryItem.getName() + "\n");

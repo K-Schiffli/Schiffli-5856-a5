@@ -1,5 +1,5 @@
 /*
- *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
  *  Copyright 2021 Kevin Schiffli
  */
 package ucf.assignments;
@@ -163,7 +163,7 @@ public class InventoryListsController {
             if (lastChosenDirectory != null)fc.setInitialDirectory(lastChosenDirectory);
 
             fc.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("TSV", "*.tsv"));
+                    new FileChooser.ExtensionFilter("TSV", "*.txt"));
             fc.setTitle("Select File To Load From");
             File loadFile = fc.showOpenDialog(itemsTable.getScene().getWindow());
             if (loadFile != null) {
@@ -174,7 +174,7 @@ public class InventoryListsController {
             //Call the loadList method of the list handler to load the specified ToDoList
             ListHandler.il.loadListAsTSV(loadFilePath);
             if (loadFile != null) {
-                listTitleBox.setText(loadFile.getName().replace(".tsv", ""));
+                listTitleBox.setText(loadFile.getName().replace(".txt", ""));
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
@@ -456,25 +456,21 @@ public class InventoryListsController {
     public void clickedHelp(ActionEvent actionEvent) {
         //Display an information pop-up with instructions
         Alert alert = new Alert(Alert.AlertType.INFORMATION, """
-                To add a new item, click the "New Item" button.
+                To add a new item, open the items dropdown menu and click the "Add New Item" button.
 
-                To edit an it's description, double-click its description box. Press enter to save your changes.
+                To edit the values of an item, double-click on the box holding the value you want to edit and make your changes. Press enter to save your changes
 
-                To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.
+                To delete an item, click on it to select it, open the items dropdown menu, and click the "Delete Selected Item" button.
 
-                To mark an item as complete, click the check box next to it.
-
-                To delete an item, click on it to select it and click the "Delete Item" button.
-
-                To clear the list, click the "Clear List" button.
+                To clear the list, open the items dropdown menu and click the "Clear Items" button.
 
                 To sort the list, double-click the header of the column you want the list sorted by.
 
-                To filter the list, click the "Show Complete", "Show Incomplete", or "Show All" buttons.
+                To search the list, enter a search term in the box below the table, open the Search dropdown menu, and select the column you want to search for that term in.
 
-                To save a list, enter a name for it in the box at the bottom and click the "Save List" button.
+                To save a list, enter a name for it in the box at the top, open the Save dropdown menu, and select the format you want to save the list as
 
-                To load a list, click the "Load List" button and choose the list you want to load. This will clear the current list.
+                To load a list, open the Load dropdown box and select the format of the file you wish to load.
 
                 This help screen is dedicated to everyone except Rey.""", ButtonType.OK);
         alert.showAndWait();

@@ -1,5 +1,5 @@
 /*
- *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
  *  Copyright 2021 Kevin Schiffli
  */
 package ucf.assignments;
@@ -82,7 +82,7 @@ class ListHandlerTest {
         ListHandler.il.itemList.clear();
 
         //Run the loadList method on the save file that should now exist
-        ListHandler.il.loadListAsTSV("TestSaves/TestListTSV.tsv");
+        ListHandler.il.loadListAsTSV("TestSaves/TestListTSV.txt");
 
         //Get the repopulated list
         List<InventoryItem> result = ListHandler.il.getItems();
