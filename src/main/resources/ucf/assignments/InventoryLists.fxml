@@ -43,18 +43,20 @@
                      </TableColumn>
                  </columns>
              </TableView>
-            <TextField fx:id="listTitleBox" layoutX="254.0" layoutY="19.0" prefHeight="25.0" prefWidth="345.0" promptText="Please Input List Title" />
-            <Button fx:id="helpButton" layoutX="22.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickedHelp" prefHeight="25.0" prefWidth="58.0" text="Help" />
-            <MenuButton fx:id="saveButton" layoutX="138.0" layoutY="19.0" mnemonicParsing="false" prefWidth="58.0" text="Save">
+            <TextField fx:id="listTitleBox" layoutX="206.0" layoutY="19.0" prefHeight="25.0" prefWidth="345.0" promptText="Please Input List Title" />
+            <Button fx:id="helpButton" layoutX="551.0" layoutY="19.0" mnemonicParsing="false" onAction="#clickedHelp" prefHeight="25.0" prefWidth="58.0" text="Help" />
+            <MenuButton fx:id="saveButton" layoutX="90.0" layoutY="19.0" mnemonicParsing="false" prefWidth="58.0" text="Save">
               <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
+                <MenuItem fx:id="saveAsJSONButton" mnemonicParsing="false" onAction="#clickedSaveAsJSON" text="As JSON" />
+                <MenuItem fx:id="saveAsTSVButton" mnemonicParsing="false" onAction="#clickedSaveAsTSV" text="As TSV" />
+                  <MenuItem fx:id="saveAsHTMLButton" mnemonicParsing="false" onAction="#clickedSaveAsHTML" text="As HTML" />
               </items>
             </MenuButton>
-            <MenuButton fx:id="loadButton" layoutX="196.0" layoutY="19.0" mnemonicParsing="false" text="Load">
+            <MenuButton fx:id="loadButton" layoutX="148.0" layoutY="19.0" mnemonicParsing="false" text="Load">
               <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
+                  <MenuItem fx:id="loadAsJSONButton" mnemonicParsing="false" onAction="#clickedLoadAsJSON" text="As JSON" />
+                  <MenuItem fx:id="loadAsTSVButton" mnemonicParsing="false" onAction="#clickedLoadAsTSV" text="As TSV" />
+                  <MenuItem fx:id="saveAsHTMLButton1" mnemonicParsing="false" onAction="#clickedSaveAsHTML" text="As HTML" />
               </items>
             </MenuButton>
             <MenuButton layoutX="22.0" layoutY="560.0" mnemonicParsing="false" text="Search">
@@ -63,7 +65,7 @@
                 <MenuItem fx:id="searchByNameButton" mnemonicParsing="false" onAction="#clickedSearchByName" text="By Name" />
               </items>
             </MenuButton>
-            <MenuButton fx:id="editButton" layoutX="80.0" layoutY="19.0" mnemonicParsing="false" prefWidth="58.0" text="Edit">
+            <MenuButton fx:id="editButton" layoutX="22.0" layoutY="19.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Items" textOverrun="CLIP">
               <items>
                 <MenuItem fx:id="addItemButton" mnemonicParsing="false" onAction="#clickedAddItem" text="Add New Item" />
                 <MenuItem fx:id="deleteItemButton" mnemonicParsing="false" onAction="#clickedDeleteItem" text="Delete Selected Item" />

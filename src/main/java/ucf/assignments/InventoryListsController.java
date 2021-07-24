@@ -70,7 +70,7 @@ public class InventoryListsController {
         }
     }
 
-    public void clickedSaveList(ActionEvent actionEvent) {
+    public void clickedSaveAsJSON(ActionEvent actionEvent) {
         //Check that the list has a title
         if (!listTitleBox.getText().equals("")) {
             //Open an Explorer window to get the save folder path
@@ -79,12 +79,12 @@ public class InventoryListsController {
             if (lastChosenDirectory != null) dc.setInitialDirectory(lastChosenDirectory);
 
             dc.setTitle("Select Directory To Save To");
-            File saveFile = dc.showDialog(saveListButton.getScene().getWindow());
+            File saveFile = dc.showDialog(itemsTable.getScene().getWindow());
             if (saveFile != null) {
                 saveFilePath = saveFile.getPath();
                 lastChosenDirectory = saveFile;
                 //Call the saveList function of the ToDoList object with the requested save folder
-                ListHandler.saveList(saveFilePath, listTitleBox.getText());
+                ListHandler.il.saveListAsJSON(saveFilePath, listTitleBox.getText());
             }
         }
         else
@@ -95,7 +95,7 @@ public class InventoryListsController {
         }
     }
 
-    public void clickedLoadList(ActionEvent actionEvent) {
+    public void clickedLoadAsJSON(ActionEvent actionEvent) {
         //Display a confirmation pop-up window
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to load a new list\n(This will clear the current list)", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.showAndWait();
@@ -108,16 +108,130 @@ public class InventoryListsController {
             fc.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("JSON", "*.json"));
             fc.setTitle("Select File To Load From");
-            File loadFile = fc.showOpenDialog(loadListButton.getScene().getWindow());
+            File loadFile = fc.showOpenDialog(itemsTable.getScene().getWindow());
             if (loadFile != null) {
                 loadFilePath = loadFile.getPath();
                 lastChosenDirectory=loadFile.getParentFile();
             } else System.out.println("ERROR: Failed to find file path");
 
             //Call the loadList method of the list handler to load the specified ToDoList
-            ListHandler.loadList(loadFilePath);
+            ListHandler.il.loadListAsJSON(loadFilePath);
             if (loadFile != null) {
                 listTitleBox.setText(loadFile.getName().replace(".json", ""));
+
+                //Refresh the content of the table
+                itemsTable.getItems().clear();
+                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+                itemsTable.setItems(currentItems);
+            }
+        }
+    }
+
+    public void clickedSaveAsTSV(ActionEvent actionEvent) {
+        //Check that the list has a title
+        if (!listTitleBox.getText().equals("")) {
+            //Open an Explorer window to get the save folder path
+            String saveFilePath = null;
+            DirectoryChooser dc = new DirectoryChooser();
+            if (lastChosenDirectory != null) dc.setInitialDirectory(lastChosenDirectory);
+
+            dc.setTitle("Select Directory To Save To");
+            File saveFile = dc.showDialog(itemsTable.getScene().getWindow());
+            if (saveFile != null) {
+                saveFilePath = saveFile.getPath();
+                lastChosenDirectory = saveFile;
+                //Call the saveList function of the ToDoList object with the requested save folder
+                ListHandler.il.saveListAsTSV(saveFilePath, listTitleBox.getText());
+            }
+        }
+        else
+        {
+            //Display an alert if the list has no title
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a list title.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    public void clickedLoadAsTSV(ActionEvent actionEvent) {
+        //Display a confirmation pop-up window
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to load a new list\n(This will clear the current list)", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.YES) {
+            //Open an Explorer window to get the file path
+            String loadFilePath = null;
+            FileChooser fc = new FileChooser();
+            if (lastChosenDirectory != null)fc.setInitialDirectory(lastChosenDirectory);
+
+            fc.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("TSV", "*.tsv"));
+            fc.setTitle("Select File To Load From");
+            File loadFile = fc.showOpenDialog(itemsTable.getScene().getWindow());
+            if (loadFile != null) {
+                loadFilePath = loadFile.getPath();
+                lastChosenDirectory=loadFile.getParentFile();
+            } else System.out.println("ERROR: Failed to find file path");
+
+            //Call the loadList method of the list handler to load the specified ToDoList
+            ListHandler.il.loadListAsTSV(loadFilePath);
+            if (loadFile != null) {
+                listTitleBox.setText(loadFile.getName().replace(".tsv", ""));
+
+                //Refresh the content of the table
+                itemsTable.getItems().clear();
+                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+                itemsTable.setItems(currentItems);
+            }
+        }
+    }
+
+    public void clickedSaveAsHTML(ActionEvent actionEvent) {
+        //Check that the list has a title
+        if (!listTitleBox.getText().equals("")) {
+            //Open an Explorer window to get the save folder path
+            String saveFilePath = null;
+            DirectoryChooser dc = new DirectoryChooser();
+            if (lastChosenDirectory != null) dc.setInitialDirectory(lastChosenDirectory);
+
+            dc.setTitle("Select Directory To Save To");
+            File saveFile = dc.showDialog(itemsTable.getScene().getWindow());
+            if (saveFile != null) {
+                saveFilePath = saveFile.getPath();
+                lastChosenDirectory = saveFile;
+                //Call the saveList function of the ToDoList object with the requested save folder
+                ListHandler.il.saveListAsHTML(saveFilePath, listTitleBox.getText());
+            }
+        }
+        else
+        {
+            //Display an alert if the list has no title
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a list title.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    public void clickedLoadAsHTML(ActionEvent actionEvent) {
+        //Display a confirmation pop-up window
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to load a new list\n(This will clear the current list)", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.YES) {
+            //Open an Explorer window to get the file path
+            String loadFilePath = null;
+            FileChooser fc = new FileChooser();
+            if (lastChosenDirectory != null)fc.setInitialDirectory(lastChosenDirectory);
+
+            fc.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("HTML", "*.html"));
+            fc.setTitle("Select File To Load From");
+            File loadFile = fc.showOpenDialog(itemsTable.getScene().getWindow());
+            if (loadFile != null) {
+                loadFilePath = loadFile.getPath();
+                lastChosenDirectory=loadFile.getParentFile();
+            } else System.out.println("ERROR: Failed to find file path");
+
+            //Call the loadList method of the list handler to load the specified ToDoList
+            ListHandler.il.loadListAsHTML(loadFilePath);
+            if (loadFile != null) {
+                listTitleBox.setText(loadFile.getName().replace(".html", ""));
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
@@ -159,8 +273,10 @@ public class InventoryListsController {
             //If the description is within length requirements, set it as the new description
             if (ListHandler.il.validateName(newName)) selItem.setName(newName);
             //Else notify the user of the constraint
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
-            alert.showAndWait();
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
+                alert.showAndWait();
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -182,9 +298,11 @@ public class InventoryListsController {
             //Validate the description
             //If the description is within length requirements, set it as the new description
             if (ListHandler.il.validateName(newName)) selItem.setName(newName);
-                //Else notify the user of the constraint
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
-            alert.showAndWait();
+            //Else notify the user of the constraint
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Item name must be between 2 and 256 characters, inclusive.", ButtonType.OK);
+                alert.showAndWait();
+            }
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
@@ -200,7 +318,7 @@ public class InventoryListsController {
         //If the selected item exists...
         if (selItem != null) {
             //Get the new serial number from the box
-            String newSerialNum = editedCell.getNewValue().toString();
+            String newSerialNum = editedCell.getNewValue();
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
@@ -233,7 +351,7 @@ public class InventoryListsController {
         //If the selected item exists...
         if (selItem != null) {
             //Get the new serial number from the box
-            String newSerialNum = editedCell.getNewValue().toString();
+            String newSerialNum = editedCell.getNewValue();
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
@@ -273,7 +391,7 @@ public class InventoryListsController {
             if (ListHandler.il.validatePrice(newPrice)) selItem.setPrice(newPrice);
             //Else notify the user of the constraint
             else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount in the format $X...X.XX", ButtonType.OK);
                 alert.showAndWait();
             }
 
@@ -298,7 +416,7 @@ public class InventoryListsController {
             if (ListHandler.il.validatePrice(newPrice)) selItem.setPrice(newPrice);
             //Else notify the user of the constraint
             else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Price must be a valid U.S. dollar amount in the format $X...X.XX", ButtonType.OK);
                 alert.showAndWait();
             }
 
@@ -337,17 +455,28 @@ public class InventoryListsController {
 
     public void clickedHelp(ActionEvent actionEvent) {
         //Display an information pop-up with instructions
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "To add a new item, click the \"New Item\" button.\n\n" +
-                "To edit an it's description, double-click its description box. Press enter to save your changes.\n\n" +
-                "To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.\n\n" +
-                "To mark an item as complete, click the check box next to it.\n\n" +
-                "To delete an item, click on it to select it and click the \"Delete Item\" button.\n\n" +
-                "To clear the list, click the \"Clear List\" button.\n\n" +
-                "To sort the list, double-click the header of the column you want the list sorted by.\n\n" +
-                "To filter the list, click the \"Show Complete\", \"Show Incomplete\", or \"Show All\" buttons.\n\n" +
-                "To save a list, enter a name for it in the box at the bottom and click the \"Save List\" button.\n\n" +
-                "To load a list, click the \"Load List\" button and choose the list you want to load. This will clear the current list.\n\n" +
-                "This help screen is dedicated to everyone except Rey.", ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, """
+                To add a new item, click the "New Item" button.
+
+                To edit an it's description, double-click its description box. Press enter to save your changes.
+
+                To give an item a due date, click to select it, then pick or enter a date using the date box at the bottom.
+
+                To mark an item as complete, click the check box next to it.
+
+                To delete an item, click on it to select it and click the "Delete Item" button.
+
+                To clear the list, click the "Clear List" button.
+
+                To sort the list, double-click the header of the column you want the list sorted by.
+
+                To filter the list, click the "Show Complete", "Show Incomplete", or "Show All" buttons.
+
+                To save a list, enter a name for it in the box at the bottom and click the "Save List" button.
+
+                To load a list, click the "Load List" button and choose the list you want to load. This will clear the current list.
+
+                This help screen is dedicated to everyone except Rey.""", ButtonType.OK);
         alert.showAndWait();
     }
 

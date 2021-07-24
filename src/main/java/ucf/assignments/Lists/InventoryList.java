@@ -4,8 +4,13 @@
  */
 package ucf.assignments.Lists;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import ucf.assignments.Lists.Items.InventoryItem;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,5 +102,166 @@ public class InventoryList {
     public boolean validateName(String name) {
         //Check that the name is between 2 and 256 characters, inclusive
         return name.length() <= 256 && name.length() >= 2;
+    }
+
+    //Create a method to save a single list as a JSON file
+    public void saveListAsJSON(String folderPath, String listTitle) {
+        //Enclose the file writing function in a try/catch in case the operation fails
+        try {
+            //Create an instance of the FileWriter class and pass it the name of the file
+            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".json");
+            fw.write("{\n\t\"items\": [{\n");
+            for (int i = 0; i < itemList.size(); i++) {
+                //Because each object is simple enough, serialize it manually
+                fw.write("\t\"serialNum\": " + itemList.get(i).getSerialNum()+",\n");
+                fw.write("\t\t\t\"price\": \"" + itemList.get(i).getPrice()+"\",\n");
+                fw.write("\t\t\t\"name\": \"" + itemList.get(i).getName()+"\"\n");
+                if (i+1 == itemList.size()) fw.write("\n\t\t}");
+                else fw.write("\n\t\t},\n\t\t{");
+            }
+            fw.write("\n\t]\n}");
+            //Remember to close the file and let the user know it worked
+            fw.close();
+            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
+        } catch (IOException e) {
+            System.out.println("Could not write to file.");
+            e.printStackTrace();
+        }
+    }
+
+    //Create a method to load a JSON file
+    public void loadListAsJSON (String filePath)
+    {
+        //Clear the current ToDoItems list
+        int length = getItems().size();
+        for (int i = (length - 1); i >= 0; i--){
+            removeItem(itemList.get(i));
+        }
+        //Create a File object to read the data from
+        File inputFile = new File(filePath);
+
+        //Wrap the operation in a try/catch statement to handle any errors
+        try {
+            //Create a json elements for use in parsing the array
+            JsonElement fileElement = JsonParser.parseReader(new FileReader(inputFile));
+            JsonObject fileObject = fileElement.getAsJsonObject();
+            JsonArray jsonArrayOfItems = fileObject.get("items").getAsJsonArray();
+
+            //Loop through the array and parse the json into separate fields
+            for (JsonElement itemElement : jsonArrayOfItems) {
+                JsonObject itemJsonObject = itemElement.getAsJsonObject();
+                String serialNum = itemJsonObject.get("serialNum").getAsString();
+                String price = itemJsonObject.get("price").getAsString();
+                String name = itemJsonObject.get("name").getAsString();
+
+                //Build a new ToDoList object and add it to a list of Products
+                InventoryItem item = new InventoryItem(serialNum, price, name);
+                itemList.add(item);
+            }
+            //Catch any exceptions thrown and print ane error message and the stack trace
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not parse data");
+            e.printStackTrace();
+        }
+    }
+
+    //Create a method to save a single list as a Tab Separated Values file
+    public void saveListAsTSV(String folderPath, String listTitle) {
+        //Enclose the file writing function in a try/catch in case the operation fails
+        try {
+            //Create an instance of the FileWriter class and pass it the name of the file
+            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".tsv");
+            for (InventoryItem inventoryItem : itemList) {
+                //Because each object is simple enough, serialize it manually
+                fw.write(inventoryItem.getSerialNum() + "\t" + inventoryItem.getPrice() + "\t" + inventoryItem.getName() + "\n");
+            }
+            //Remember to close the file
+            fw.close();
+            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
+        } catch (IOException e) {
+            System.out.println("Could not write to file.");
+            e.printStackTrace();
+        }
+    }
+
+    //Create a method to load a Tab Separated Values file
+    public void loadListAsTSV (String filePath)
+    {
+        //Clear the current ToDoItems list
+        int length = getItems().size();
+        for (int i = (length - 1); i >= 0; i--){
+            removeItem(itemList.get(i));
+        }
+        //Create a File object to read the data from
+        File inputFile = new File(filePath);
+        //Wrap the operation in a try/catch statement to handle any errors
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader(inputFile));
+            //Loop through the array and parse each line into separate fields
+            String line;
+            while((line = bfr.readLine()) != null){
+                String[] splitLine = line.split("\t");
+                InventoryItem newItem = new InventoryItem(splitLine[0], splitLine[1], splitLine[2]);
+                itemList.add(newItem);
+            }
+            //Catch any exceptions thrown and print ane error message and the stack trace
+        } catch (IOException e) {
+            System.out.println("Could not parse data");
+            e.printStackTrace();
+        }
+    }
+
+    //Create a method to save a single list as HTML
+    public void saveListAsHTML(String folderPath, String listTitle) {
+        //Enclose the file writing function in a try/catch in case the operation fails
+        try {
+            //Create an instance of the FileWriter class and pass it the name of the file
+            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".html");
+            for (int i = 0; i < itemList.size(); i++) {
+
+            }
+            //Remember to close the file and let the user know it worked
+            fw.close();
+            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
+        } catch (IOException e) {
+            System.out.println("Could not write to file.");
+            e.printStackTrace();
+        }
+    }
+
+    //Create a method to load an HTML file
+    public void loadListAsHTML (String filePath)
+    {
+        //Clear the current ToDoItems list
+        int length = getItems().size();
+        for (int i = (length - 1); i >= 0; i--){
+            removeItem(itemList.get(i));
+        }
+        //Create a File object to read the data from
+        File inputFile = new File(filePath);
+
+        //Wrap the operation in a try/catch statement to handle any errors
+        try {
+            //Create a json elements for use in parsing the array
+            JsonElement fileElement = JsonParser.parseReader(new FileReader(inputFile));
+            JsonObject fileObject = fileElement.getAsJsonObject();
+            JsonArray jsonArrayOfItems = fileObject.get("items").getAsJsonArray();
+
+            //Loop through the array and parse the json into separate fields
+            for (JsonElement itemElement : jsonArrayOfItems) {
+                JsonObject itemJsonObject = itemElement.getAsJsonObject();
+                String serialNum = itemJsonObject.get("serialNum").getAsString();
+                String price = itemJsonObject.get("price").getAsString();
+                String name = itemJsonObject.get("name").getAsString();
+
+                //Build a new ToDoList object and add it to a list of Products
+                InventoryItem item = new InventoryItem(serialNum, price, name);
+                itemList.add(item);
+            }
+            //Catch any exceptions thrown and print ane error message and the stack trace
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not parse data");
+            e.printStackTrace();
+        }
     }
 }

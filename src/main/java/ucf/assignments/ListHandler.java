@@ -16,66 +16,6 @@ public class ListHandler {
     //Create a new ToDoList object
     static InventoryList il = new InventoryList();
 
-    //Create a method to save a single list
-    public static void saveList(String folderPath, String listTitle) {
-        //Enclose the file writing function in a try/catch in case the operation fails
-        try {
-            //Create an instance of the FileWriter class and pass it the name of the file
-            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".json");
-            fw.write("{\n\t\"items\": [{\n");
-            for (int i = 0; i < il.itemList.size(); i++) {
-            //Because each object is simple enough, serialize it manually
-                fw.write("\t\"serialNum\": " + il.itemList.get(i).getSerialNum()+",\n");
-                fw.write("\t\t\t\"price\": \"" + il.itemList.get(i).getPrice()+"\",\n");
-                fw.write("\t\t\t\"name\": \"" + il.itemList.get(i).getName()+"\"\n");
-                if (i+1 == il.itemList.size()) fw.write("\n\t\t}");
-                else fw.write("\n\t\t},\n\t\t{");
-            }
-            fw.write("\n\t]\n}");
-            //Remember to close the file and let the user know it worked
-            fw.close();
-            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not write to file.");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to load a single list
-    public static void loadList (String filePath)
-    {
-        //Clear the current ToDoItems list
-        int length = il.getItems().size();
-        for (int i = (length - 1); i >= 0; i--){
-            il.removeItem(il.itemList.get(i));
-        }
-        //Create a File object to read the data from
-        File inputFile = new File(filePath);
-
-        //Wrap the operation in a try/catch statement to handle any errors
-        try {
-            //Create a json elements for use in parsing the array
-            JsonElement fileElement = JsonParser.parseReader(new FileReader(inputFile));
-            JsonObject fileObject = fileElement.getAsJsonObject();
-            JsonArray jsonArrayOfItems = fileObject.get("items").getAsJsonArray();
-
-            //Loop through the array and parse the json into separate fields
-            for (JsonElement itemElement : jsonArrayOfItems) {
-                JsonObject itemJsonObject = itemElement.getAsJsonObject();
-                String serialNum = itemJsonObject.get("serialNum").getAsString();
-                String price = itemJsonObject.get("price").getAsString();
-                String name = itemJsonObject.get("name").getAsString();
-
-                //Build a new ToDoList object and add it to a list of Products
-                InventoryItem item = new InventoryItem(serialNum, price, name);
-                il.itemList.add(item);
-            }
-            //Catch any exceptions thrown and print ane error message and the stack trace
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not parse data");
-            e.printStackTrace();
-        }
-    }
 
     //Create a function to search the list items
     public static List<InventoryItem> getSearchedItems(String searchTerm, String searchColumn) {
