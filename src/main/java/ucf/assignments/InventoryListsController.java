@@ -384,7 +384,7 @@ public class InventoryListsController {
         //If the selected item exists...
         if (selItem != null) {
             //Get the new description from the box
-            String newPrice = editedCell.getNewValue().toString();
+            String newPrice = editedCell.getNewValue();
 
             //Validate the description
             //If the description is within length requirements, set it as the new description
@@ -409,7 +409,7 @@ public class InventoryListsController {
         //If the selected item exists...
         if (selItem != null) {
             //Get the new description from the box
-            String newPrice = editedCell.getNewValue().toString();
+            String newPrice = editedCell.getNewValue();
 
             //Validate the description
             //If the description is within length requirements, set it as the new description

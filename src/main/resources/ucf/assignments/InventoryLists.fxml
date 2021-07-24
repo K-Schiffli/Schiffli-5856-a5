@@ -56,7 +56,7 @@
               <items>
                   <MenuItem fx:id="loadAsJSONButton" mnemonicParsing="false" onAction="#clickedLoadAsJSON" text="As JSON" />
                   <MenuItem fx:id="loadAsTSVButton" mnemonicParsing="false" onAction="#clickedLoadAsTSV" text="As TSV" />
-                  <MenuItem fx:id="saveAsHTMLButton1" mnemonicParsing="false" onAction="#clickedSaveAsHTML" text="As HTML" />
+                  <MenuItem fx:id="loadAsHTMLButton" mnemonicParsing="false" onAction="#clickedLoadAsHTML" text="As HTML" />
               </items>
             </MenuButton>
             <MenuButton layoutX="22.0" layoutY="560.0" mnemonicParsing="false" text="Search">

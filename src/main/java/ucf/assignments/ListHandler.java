@@ -6,9 +6,6 @@ package ucf.assignments;
 
 import ucf.assignments.Lists.InventoryList;
 import ucf.assignments.Lists.Items.InventoryItem;
-import com.google.gson.*;
-
-import java.io.*;
 import java.util.List;
 
 public class ListHandler {
