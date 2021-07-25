@@ -4,17 +4,7 @@
  */
 package ucf.assignments.Lists;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import ucf.assignments.Lists.Items.InventoryItem;
-
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
