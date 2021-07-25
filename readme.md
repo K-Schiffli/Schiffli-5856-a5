@@ -1,4 +1,4 @@
-To add a new item to the list, open the items dropdown menu von the top menu bar and click the "Add New Item" button.
+To add a new item to the list, open the items dropdown menu on the top menu bar and click the "Add New Item" button.
 
 To edit the values of an item, double-click on the box holding the value you want to edit and make your changes. Press enter to save your changes.
 
