@@ -19,8 +19,6 @@ public class InventoryListsController {
     public TableColumn<InventoryItem, String> serialNumberColumn;
     public TableColumn<InventoryItem, String> priceColumn;
     public TableColumn<InventoryItem,String> nameColumn;
-    public Button saveListButton;
-    public Button loadListButton;
     public TextField listTitleBox;
     public Button helpButton;
     public MenuItem deleteItemButton;
@@ -36,20 +34,23 @@ public class InventoryListsController {
     String searchTerm = "";
     String searchColumn = "Show All";
 
-    private final ObservableList<InventoryItem> items = FXCollections.observableArrayList();
+    //Create instances of the handlers for different functions
+    ListSaveAndLoadHandler snlHandler = new ListSaveAndLoadHandler();
+    ItemSearchHandler isHandler = new ItemSearchHandler();
+
     private final ObservableList<InventoryItem> currentItems = FXCollections.observableArrayList();
 
     public void clickedAddItem(ActionEvent actionEvent) {
-        //Call the addItem method of the ToDoList
+        //Call the addItem method of the InventoryList
         ListHandler.il.addItem();
         //Clear current filter and refresh the displayed list
         itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+        currentItems.addAll(isHandler.getSearchedItems("", "Show All"));
         itemsTable.setItems(currentItems);
     }
 
     public void clickedDeleteItem(ActionEvent actionEvent) {
-        //Get the selected ToDoItem
+        //Get the selected InventoryItem
         InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
 
         //If the selected item exists...
@@ -64,7 +65,7 @@ public class InventoryListsController {
 
                 //Refresh the displayed list
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+                currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -83,8 +84,8 @@ public class InventoryListsController {
             if (saveFile != null) {
                 saveFilePath = saveFile.getPath();
                 lastChosenDirectory = saveFile;
-                //Call the saveList function of the ToDoList object with the requested save folder
-                ListHandler.il.saveListAsJSON(saveFilePath, listTitleBox.getText());
+                //Call the saveList function of the InventoryList object with the requested save folder
+                snlHandler.saveListAsJSON(saveFilePath, listTitleBox.getText());
             }
         }
         else
@@ -115,13 +116,13 @@ public class InventoryListsController {
             } else System.out.println("ERROR: Failed to find file path");
 
             //Call the loadList method of the list handler to load the specified ToDoList
-            ListHandler.il.loadListAsJSON(loadFilePath);
+            snlHandler.loadListAsJSON(loadFilePath);
             if (loadFile != null) {
                 listTitleBox.setText(loadFile.getName().replace(".json", ""));
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+                currentItems.addAll(isHandler.getSearchedItems("", "Show All"));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -141,7 +142,7 @@ public class InventoryListsController {
                 saveFilePath = saveFile.getPath();
                 lastChosenDirectory = saveFile;
                 //Call the saveList function of the ToDoList object with the requested save folder
-                ListHandler.il.saveListAsTSV(saveFilePath, listTitleBox.getText());
+                snlHandler.saveListAsTSV(saveFilePath, listTitleBox.getText());
             }
         }
         else
@@ -172,13 +173,13 @@ public class InventoryListsController {
             } else System.out.println("ERROR: Failed to find file path");
 
             //Call the loadList method of the list handler to load the specified ToDoList
-            ListHandler.il.loadListAsTSV(loadFilePath);
+            snlHandler.loadListAsTSV(loadFilePath);
             if (loadFile != null) {
                 listTitleBox.setText(loadFile.getName().replace(".txt", ""));
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+                currentItems.addAll(isHandler.getSearchedItems("", "Show All"));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -198,7 +199,7 @@ public class InventoryListsController {
                 saveFilePath = saveFile.getPath();
                 lastChosenDirectory = saveFile;
                 //Call the saveList function of the ToDoList object with the requested save folder
-                ListHandler.il.saveListAsHTML(saveFilePath, listTitleBox.getText());
+                snlHandler.saveListAsHTML(saveFilePath, listTitleBox.getText());
             }
         }
         else
@@ -229,13 +230,13 @@ public class InventoryListsController {
             } else System.out.println("ERROR: Failed to find file path");
 
             //Call the loadList method of the list handler to load the specified ToDoList
-            ListHandler.il.loadListAsHTML(loadFilePath);
+            snlHandler.loadListAsHTML(loadFilePath);
             if (loadFile != null) {
                 listTitleBox.setText(loadFile.getName().replace(".html", ""));
 
                 //Refresh the content of the table
                 itemsTable.getItems().clear();
-                currentItems.addAll(ListHandler.getSearchedItems("", "Show All"));
+                currentItems.addAll(isHandler.getSearchedItems("", "Show All"));
                 itemsTable.setItems(currentItems);
             }
         }
@@ -259,7 +260,7 @@ public class InventoryListsController {
         }
     }
 
-    public void editedName(TableColumn.CellEditEvent editedCell) {
+    public void editedName(TableColumn.CellEditEvent<?,?> editedCell) {
 
         //Get the currently selected item
         InventoryItem selItem = itemsTable.getSelectionModel().getSelectedItem();
@@ -280,7 +281,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -306,7 +307,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -322,12 +323,12 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (ListHandler.il.validateSerialNum(newSerialNum)) {
+            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
             }
-            else if (ListHandler.il.checkForSerialNumDupe(newSerialNum)){
+            else if (!ListHandler.il.checkForSerialNumDupe(newSerialNum)){
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
                 alert.showAndWait();
             }
@@ -339,7 +340,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -355,12 +356,12 @@ public class InventoryListsController {
 
             //Validate the serial number
             //Check that the serial number matches the required format and it's not a duplication
-            if (ListHandler.il.validateSerialNum(newSerialNum)) {
+            if (!ListHandler.il.validateSerialNum(newSerialNum)) {
                 //Else notify the user of the constraint
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number doesn't match required format", ButtonType.OK);
                 alert.showAndWait();
             }
-            else if (ListHandler.il.checkForSerialNumDupe(newSerialNum)){
+            else if (!ListHandler.il.checkForSerialNumDupe(newSerialNum)){
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Serial Number already in use", ButtonType.OK);
                 alert.showAndWait();
             }
@@ -372,7 +373,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -397,7 +398,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -422,7 +423,7 @@ public class InventoryListsController {
 
             //Refresh the displayed items
             itemsTable.getItems().clear();
-            currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+            currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
             itemsTable.setItems(currentItems);
         }
     }
@@ -436,7 +437,7 @@ public class InventoryListsController {
 
         //Call the search function and load that into the table
         itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+        currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
         itemsTable.setItems(currentItems);
     }
 
@@ -449,7 +450,7 @@ public class InventoryListsController {
 
         //Call the search function and load that into the table
         itemsTable.getItems().clear();
-        currentItems.addAll(ListHandler.getSearchedItems(searchTerm, searchColumn));
+        currentItems.addAll(isHandler.getSearchedItems(searchTerm, searchColumn));
         itemsTable.setItems(currentItems);
     }
 
@@ -458,7 +459,7 @@ public class InventoryListsController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, """
                 To add a new item, open the items dropdown menu and click the "Add New Item" button.
 
-                To edit the values of an item, double-click on the box holding the value you want to edit and make your changes. Press enter to save your changes
+                To edit the values of an item, double-click on the box holding the value you want to edit and make your changes. Press enter to save your changes.
 
                 To delete an item, click on it to select it, open the items dropdown menu, and click the "Delete Selected Item" button.
 
@@ -467,8 +468,10 @@ public class InventoryListsController {
                 To sort the list, double-click the header of the column you want the list sorted by.
 
                 To search the list, enter a search term in the box below the table, open the Search dropdown menu, and select the column you want to search for that term in.
+                
+                To show all items again after searching, select a search method without a search term entered.
 
-                To save a list, enter a name for it in the box at the top, open the Save dropdown menu, and select the format you want to save the list as
+                To save a list, enter a name for it in the box at the top, open the Save dropdown menu, and select the format you want to save the list as.
 
                 To load a list, open the Load dropdown box and select the format of the file you wish to load.
 

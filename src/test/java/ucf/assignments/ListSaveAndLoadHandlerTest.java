@@ -4,14 +4,17 @@
  */
 package ucf.assignments;
 
-import ucf.assignments.Lists.Items.InventoryItem;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import ucf.assignments.Lists.InventoryList;
+import ucf.assignments.Lists.Items.InventoryItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class ListHandlerTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class ListSaveAndLoadHandlerTest {
+    ListSaveAndLoadHandler snlHandler = new ListSaveAndLoadHandler();
 
     @Test
     void saveListAsJSON_should_properly_save_the_list_and_loadListAsJSON_should_properly_load_it() {
@@ -34,13 +37,13 @@ class ListHandlerTest {
         expected.add(testItem);
 
         //Run the saveList method with a test file path
-        ListHandler.il.saveListAsJSON("TestSaves","TestListJSON");
+        snlHandler.saveListAsJSON("TestSaves","TestListJSON");
 
         //Clear the itemsList
         ListHandler.il.itemList.clear();
 
         //Run the loadList method on the save file that should now exist
-        ListHandler.il.loadListAsJSON("TestSaves/TestListJSON.json");
+        snlHandler.loadListAsJSON("TestSaves/TestListJSON.json");
 
         //Get the repopulated list
         List<InventoryItem> result = ListHandler.il.getItems();
@@ -76,13 +79,13 @@ class ListHandlerTest {
         expected.add(testItem);
 
         //Run the saveList method with a test file path
-        ListHandler.il.saveListAsTSV("TestSaves","TestListTSV");
+        snlHandler.saveListAsTSV("TestSaves","TestListTSV");
 
         //Clear the itemsList
         ListHandler.il.itemList.clear();
 
         //Run the loadList method on the save file that should now exist
-        ListHandler.il.loadListAsTSV("TestSaves/TestListTSV.txt");
+        snlHandler.loadListAsTSV("TestSaves/TestListTSV.txt");
 
         //Get the repopulated list
         List<InventoryItem> result = ListHandler.il.getItems();
@@ -118,13 +121,13 @@ class ListHandlerTest {
         expected.add(testItem);
 
         //Run the saveList method with a test file path
-        ListHandler.il.saveListAsHTML("TestSaves","TestListHTML");
+        snlHandler.saveListAsHTML("TestSaves","TestListHTML");
 
         //Clear the itemsList
         ListHandler.il.itemList.clear();
 
         //Run the loadList method on the save file that should now exist
-        ListHandler.il.loadListAsHTML("TestSaves/TestListHTML.HTML");
+        snlHandler.loadListAsHTML("TestSaves/TestListHTML.HTML");
 
         //Get the repopulated list
         List<InventoryItem> result = ListHandler.il.getItems();
@@ -138,4 +141,5 @@ class ListHandlerTest {
         //Clear the itemsList
         ListHandler.il.itemList.clear();
     }
+
 }

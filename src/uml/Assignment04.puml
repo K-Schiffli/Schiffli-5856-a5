@@ -31,14 +31,6 @@ Class InventoryListsController{
 Class ListHandler{
 --Parameters--
 List<InventoryList>
---Methods--
-+SaveListAsJSON()
-+loadListAsJSON()
-+SaveListAsTSV()
-+loadListAsTSV()
-+SaveListAsHTML()
-+loadListAsHTML()
-+getSearchedItems()
 }
 
 Class InventoryList{
@@ -49,7 +41,6 @@ List<InventoryItem>
 +addItem()
 +removeItem()
 +getItems()
-+searchItems()
 +validateName()
 +validatePrice()
 +validateSerialNum()
@@ -70,10 +61,30 @@ String serialNum
 +getItemSerialNum()
 }
 
+Class ListSaveAndLoadHandler{
+--methods--
++SaveListAsJSON()
++loadListAsJSON()
++SaveListAsTSV()
++loadListAsTSV()
++SaveListAsHTML()
++loadListAsHTML()
+}
+
+Class ItemSearchHandler{
+--methods--
++getSearchedItems()
++searchItems()
+}
+
 InventoryLists ..|> InventoryListsController
-InventoryLists -- ListHandler
+InventoryListsController -- ListHandler
 ListHandler o- InventoryList
 InventoryList o- InventoryItem
-InventoryListsFXML o- InventoryListsController
+InventoryListsFXML --|> InventoryListsController
+ItemSearchHandler -- InventoryList
+ListSaveAndLoadHandler -- InventoryList
+InventoryListsController -- ItemSearchHandler
+InventoryListsController -- ListSaveAndLoadHandler
 
 @enduml

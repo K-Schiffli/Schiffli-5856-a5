@@ -47,51 +47,37 @@ public class InventoryList {
         return itemList;
     }
 
-    //Create a method to search the list based on the term and the column
-    public List<InventoryItem> searchItems(String searchTerm, String searchColumn) {
-
-        //Create a new List of ToDoItems to hold the output
-        List<InventoryItem> searchedItemList = new ArrayList<>();
-
-        //Loop through the list
-        for (InventoryItem inventoryItem : itemList) {
-            if (searchColumn.equals("serialNum") && inventoryItem.getSerialNum().contains(searchTerm))
-                searchedItemList.add(inventoryItem);
-            else if (searchColumn.equals("name") && inventoryItem.getName().contains(searchTerm))
-                searchedItemList.add(inventoryItem);
-        }
-
-        //Return the resulting list
-        return searchedItemList;
-    }
-
     public boolean validateSerialNum(String serialNum) {
         //Check that the serial number is the correct length
-        if (serialNum.length() != 10) return true;
+        if (serialNum.length() != 10) return false;
 
         //Check that the serial number contains only characters and digits
         for (int i = 0; i < serialNum.length(); i++) {
-            if (!Character.isLetterOrDigit(serialNum.charAt(i))) return true;
+            if (!Character.isLetterOrDigit(serialNum.charAt(i))) return false;
         }
-        return false;
+        return true;
     }
 
     public boolean checkForSerialNumDupe(String serialNum) {
 
         //Check that the new serial number isn't duplicated
         for (InventoryItem inventoryItem : itemList) {
-            if (serialNum.equals(inventoryItem.getSerialNum())) return true;
+            if (serialNum.equals(inventoryItem.getSerialNum())) return false;
         }
-        return false;
+        return true;
     }
 
     public boolean validatePrice(String price) {
         //Check that the price is the correct format
 
-        //Check that the third-from-last character is a decimal point.
+        //Check that the number begins with a dollar sign
         if (price.charAt(0) != '$') return false;
-        else if (price.charAt(1) == '0') return false;
+        //Check that the dollar amount doesn't have a leading 0
+        else if (price.charAt(1) == '0'&& price.charAt(2) != '.') return false;
+        //Check that the third-from-last character is a decimal point.
         else if (price.charAt(price.length() - 3) != '.') return false;
+
+        //Check that every index before the decimal point and after it are numbers
         for (int i = 1; i < price.length() - 4; i++)
         {
             if (price.charAt(i) < '0' || price.charAt(i) > '9') return false;
@@ -100,186 +86,13 @@ public class InventoryList {
         {
             if (price.charAt(i) < '0' || price.charAt(i) > '9') return false;
         }
+
+        //If all checks pass, return true
         return true;
     }
 
     public boolean validateName(String name) {
         //Check that the name is between 2 and 256 characters, inclusive
         return name.length() <= 256 && name.length() >= 2;
-    }
-
-    //Create a method to save a single list as a JSON file
-    public void saveListAsJSON(String folderPath, String listTitle) {
-        //Enclose the file writing function in a try/catch in case the operation fails
-        try {
-            //Create an instance of the FileWriter class and pass it the name of the file
-            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".json");
-            fw.write("{\n\t\"items\": [{\n");
-            for (int i = 0; i < itemList.size(); i++) {
-                //Because each object is simple enough, serialize it manually
-                fw.write("\t\"serialNum\": " + itemList.get(i).getSerialNum()+",\n");
-                fw.write("\t\t\t\"price\": \"" + itemList.get(i).getPrice()+"\",\n");
-                fw.write("\t\t\t\"name\": \"" + itemList.get(i).getName()+"\"\n");
-                if (i+1 == itemList.size()) fw.write("\n\t\t}");
-                else fw.write("\n\t\t},\n\t\t{");
-            }
-            fw.write("\n\t]\n}");
-            //Remember to close the file and let the user know it worked
-            fw.close();
-            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not write to file.");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to load a JSON file
-    public void loadListAsJSON (String filePath)
-    {
-        //Clear the current ToDoItems list
-        int length = getItems().size();
-        for (int i = (length - 1); i >= 0; i--){
-            removeItem(itemList.get(i));
-        }
-        //Create a File object to read the data from
-        File inputFile = new File(filePath);
-
-        //Wrap the operation in a try/catch statement to handle any errors
-        try {
-            //Create a json elements for use in parsing the array
-            JsonElement fileElement = JsonParser.parseReader(new FileReader(inputFile));
-            JsonObject fileObject = fileElement.getAsJsonObject();
-            JsonArray jsonArrayOfItems = fileObject.get("items").getAsJsonArray();
-
-            //Loop through the array and parse the json into separate fields
-            for (JsonElement itemElement : jsonArrayOfItems) {
-                JsonObject itemJsonObject = itemElement.getAsJsonObject();
-                String serialNum = itemJsonObject.get("serialNum").getAsString();
-                String price = itemJsonObject.get("price").getAsString();
-                String name = itemJsonObject.get("name").getAsString();
-
-                //Build a new ToDoList object and add it to a list of Products
-                InventoryItem item = new InventoryItem(serialNum, price, name);
-                itemList.add(item);
-            }
-            //Catch any exceptions thrown and print ane error message and the stack trace
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not parse data");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to save a single list as a Tab Separated Values file
-    public void saveListAsTSV(String folderPath, String listTitle) {
-        //Enclose the file writing function in a try/catch in case the operation fails
-        try {
-            //Create an instance of the FileWriter class and pass it the name of the file
-            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".txt");
-            for (InventoryItem inventoryItem : itemList) {
-                //Because each object is simple enough, serialize it manually
-                fw.write(inventoryItem.getSerialNum() + "\t" + inventoryItem.getPrice() + "\t" + inventoryItem.getName() + "\n");
-            }
-            //Remember to close the file
-            fw.close();
-            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not write to file.");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to load a Tab Separated Values file
-    public void loadListAsTSV (String filePath)
-    {
-        //Clear the current ToDoItems list
-        int length = getItems().size();
-        for (int i = (length - 1); i >= 0; i--){
-            removeItem(itemList.get(i));
-        }
-        //Create a File object to read the data from
-        File inputFile = new File(filePath);
-        //Wrap the operation in a try/catch statement to handle any errors
-        try {
-            BufferedReader bfr = new BufferedReader(new FileReader(inputFile));
-            //Loop through the array and parse each line into separate fields
-            String line;
-            while((line = bfr.readLine()) != null){
-                String[] splitLine = line.split("\t");
-                InventoryItem newItem = new InventoryItem(splitLine[0], splitLine[1], splitLine[2]);
-                itemList.add(newItem);
-            }
-            //Catch any exceptions thrown and print ane error message and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not parse data");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to save a single list as HTML
-    public void saveListAsHTML(String folderPath, String listTitle) {
-        //Enclose the file writing function in a try/catch in case the operation fails
-        try {
-            //Create an instance of the FileWriter class and pass it the name of the file
-            FileWriter fw = new FileWriter(folderPath + "/" + listTitle + ".html");
-            //Serialize the data manually again.
-            fw.write("<!DOCTYPE html>\n<html>\n" +
-                    "<body>\n" +
-                    "\n" +
-                    "<table style=\"width:20%\">");
-            fw.write("  <tr>\n" +
-                    "     <td>Serial Number</td>\n" +
-                    "     <td>Price</td>\n" +
-                    "     <td>Name</td>       \n" +
-                    "  </tr>");
-            for (InventoryItem inventoryItem : itemList) {
-                fw.write("  <tr>\n" +
-                        "     <td>"+inventoryItem.getSerialNum()+"</td>\n" +
-                        "     <td>"+inventoryItem.getPrice()+"</td>\n" +
-                        "     <td>"+inventoryItem.getName()+"</td>\n" +
-                        " </tr>\n");
-            }
-            fw.write(" </table>");
-            //Remember to close the file and let the user know it worked
-            fw.close();
-            //Catch the exception thrown if the file fails to open, print an error message, and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not write to file.");
-            e.printStackTrace();
-        }
-    }
-
-    //Create a method to load an HTML file
-    public void loadListAsHTML (String filePath)
-    {
-        //Clear the current ToDoItems list
-        int length = getItems().size();
-        for (int i = (length - 1); i >= 0; i--){
-            removeItem(itemList.get(i));
-        }
-        //Create a File object to read the data from
-        File inputFile = new File(filePath);
-
-        //Wrap the operation in a try/catch statement to handle any errors
-        Document doc = null;
-
-        try {
-            doc = Jsoup.parse(inputFile, "UTF-8", "");
-            ArrayList<String> items = new ArrayList<>();
-            Element table = doc.select("table").get(0);
-            Elements rows = table.select("tr");
-
-            for (int i = 1; i < rows.size(); i++) {
-                Element row = rows.get(i);
-                Elements cols = row.select("td");
-
-                InventoryItem newItem = new InventoryItem(cols.get(0).text(), cols.get(1).text(), cols.get(2).text());
-                itemList.add(newItem);
-
-            }
-            //Catch any exceptions thrown and print ane error message and the stack trace
-        } catch (IOException e) {
-            System.out.println("Could not parse data");
-            e.printStackTrace();
-        }
     }
 }

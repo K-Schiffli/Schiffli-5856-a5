@@ -4,18 +4,17 @@
  */
 package ucf.assignments.Lists.Items;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class InventoryItem {
 
-    //Create a completeness parameter
+    //Create a serial number parameter
     public SimpleStringProperty serialNum;
 
-    //Create a due date parameter
+    //Create a price parameter
     private final SimpleStringProperty price;
 
-    //Create a description parameter
+    //Create a name parameter
     private final SimpleStringProperty name;
 
     //Create a model for the InventoryItem object
@@ -25,29 +24,29 @@ public class InventoryItem {
         this.name = new SimpleStringProperty(nameVal);
     }
 
-    //create a setter method for the completeness parameter
+    //create a setter method for the serial number
     public void setSerialNum(String serialNumberVal) { serialNum.set(serialNumberVal); }
 
-    //Create a setter method for the due date
+    //Create a setter method for the price
     public void setPrice(String priceVal) {
         price.set(priceVal);
     }
 
-    //Create a setter method for the description
+    //Create a setter method for the name
     public void setName(String nameVal) {
         name.set(nameVal);
     }
 
-    //Create a getter method for the completeness parameter
+    //Create a getter method for the serial number
     public String getSerialNum() {
         return serialNum.get();
     }
 
-    //Create a getter method for the due date
+    //Create a getter method for the price
     public String getPrice() {
         return price.get();
     }
 
-    //Create a getter method for the description
+    //Create a getter method for the name
     public String getName() { return name.get(); }
 }
